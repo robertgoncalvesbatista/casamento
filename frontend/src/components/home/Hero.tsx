@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 
 import Photo from "../../assets/img/talking.png";
-import { initialWeddingDetails } from "../../config/Geral";
+import { initialWeddingDetails } from "../../config/geral";
 
 import Button from "../ui/Button";
 import ScrollDown from "../ui/ScrollDown";

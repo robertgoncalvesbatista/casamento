@@ -1,4 +1,4 @@
-import { events } from "../../config/Geral";
+import { events } from "../../config/geral";
 
 export default function Timeline() {
   return (

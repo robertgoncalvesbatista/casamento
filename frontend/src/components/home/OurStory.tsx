@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 
 import BancoLavandario from "../../assets/img/banco-lavandario.jpeg";
-import { initialWeddingDetails } from "../../config/Geral";
+import { initialWeddingDetails } from "../../config/geral";
 
 import Button from "../ui/Button";
 

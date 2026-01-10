@@ -1,9 +1,14 @@
+import cors from "cors";
 import express from "express";
 
+import config from "./config/config.ts";
 import { errorHandler } from "./middlewares/errorHandler.ts";
 import routes from "./routes/routes.ts";
 
 const app = express();
+
+// Para permitir CORS
+app.use(cors({ origin: config.corsOrigin }));
 
 // Para entender JSON
 app.use(express.json());

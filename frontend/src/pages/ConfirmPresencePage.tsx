@@ -15,7 +15,7 @@ import Button from "../components/ui/Button";
 import Card from "../components/ui/Card";
 import Input from "../components/ui/Input";
 
-import guestService from "../services/GuestService";
+import api from "../config/api";
 
 type TAlert = {
   type: "error" | "success" | "warning";
@@ -37,14 +37,14 @@ export default function ConfirmPresencePage() {
 
   const onSubmit = async (data: ReserveGiftValidator) => {
     try {
-      const guest = await guestService.read({
-        email: data.email?.trim(),
+      const responseGuest = await api.get("/guest", {
+        params: { email: data.email?.trim() },
       });
 
       // Verifica se este convidado já existe
-      if (!!guest) {
+      if (responseGuest.data.length > 0) {
         // Verifica se o convidado já confirmou presença
-        if (guest.confirmed) {
+        if (responseGuest.data[0].confirmed) {
           setAlert({
             type: "warning",
             message: "Convidado já confirmou presença.",
@@ -52,7 +52,11 @@ export default function ConfirmPresencePage() {
           return;
         }
 
-        await guestService.update({ confirmed: true }, { id: guest.id });
+        await api.put(
+          "/guest",
+          { confirmed: true },
+          { params: { id: responseGuest.data[0].id } }
+        );
 
         setAlert({
           type: "success",
@@ -61,7 +65,7 @@ export default function ConfirmPresencePage() {
         return;
       }
 
-      await guestService.create({
+      await api.post("/guest", {
         name: data.nome.trim(),
         email: (data.email ?? "").trim(),
         telephone: (data.telefone ?? "").replace(/\D/g, "").trim(),

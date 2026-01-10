@@ -1,6 +1,6 @@
 import { Heart } from "lucide-react";
 
-import { initialWeddingDetails } from "../../config/Geral";
+import { initialWeddingDetails } from "../../config/geral";
 
 export default function Footer() {
   const year = new Date().getFullYear();

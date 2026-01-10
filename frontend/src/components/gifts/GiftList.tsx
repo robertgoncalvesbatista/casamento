@@ -17,8 +17,7 @@ import Card from "../ui/Card";
 import Input from "../ui/Input";
 import Modal, { ModalRef } from "../ui/Modal";
 
-import giftService from "../../services/GiftService";
-import guestService from "../../services/GuestService";
+import api from "../../config/api";
 
 type TAlert = {
   type: "error" | "success" | "warning";
@@ -48,11 +47,13 @@ export default function GiftList() {
         throw new Error("Selecione um presente");
       }
 
-      const guest = await guestService.read({ email: data.email?.trim() });
+      const responseGuest = await api.get("/guest", {
+        params: { email: data.email?.trim() },
+      });
 
       // Caso não exista um convidado, cria um
-      if (!guest) {
-        await guestService.create({
+      if (responseGuest.data.length === 0) {
+        await api.post("/guest", {
           name: data.nome.trim(),
           email: (data.email ?? "").trim(),
           telephone: (data.telefone ?? "").replace(/\D/g, "").trim(),
@@ -60,13 +61,18 @@ export default function GiftList() {
           giftId: selectedGift,
         });
       } else {
-        await guestService.update(
+        await axios.put(
+          "/guest",
           { giftId: selectedGift },
-          { email: data.email?.trim() }
+          { params: { email: data.email?.trim() } }
         );
       }
 
-      await giftService.update({ reserved: true }, { id: selectedGift });
+      await axios.put(
+        "/gift",
+        { reserved: true },
+        { params: { id: selectedGift } }
+      );
 
       setAlert({
         type: "success",

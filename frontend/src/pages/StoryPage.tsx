@@ -6,7 +6,7 @@ import Coracao from "../assets/img/coracao.jpeg";
 import Lavandario from "../assets/img/lavandario.jpeg";
 import Photo from "../assets/img/photo.jpeg";
 
-import { initialWeddingDetails } from "../config/Geral";
+import { initialWeddingDetails } from "../config/geral";
 
 export default function StoryPage() {
   return (

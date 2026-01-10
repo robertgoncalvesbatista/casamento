@@ -1,6 +1,6 @@
-import { CalendarClock, MapPin, Heart } from "lucide-react";
+import { CalendarClock, Heart, MapPin } from "lucide-react";
 
-import { initialWeddingDetails } from "../../config/Geral";
+import { initialWeddingDetails } from "../../config/geral";
 
 export default function WeddingInfo() {
   return (

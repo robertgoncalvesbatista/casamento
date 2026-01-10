@@ -1,10 +1,9 @@
 import { PropsWithChildren, useEffect, useState } from "react";
 
-import { initialWeddingDetails } from "../../config/Geral";
+import { initialWeddingDetails } from "../../config/geral";
 import { WeddingDetails } from "../../types";
 
-import { Gift } from "../../../generated/prisma/client";
-import giftService from "../../services/GiftService";
+import api from "../../config/api";
 import { WeddingContext } from "./wedding.context";
 
 export function WeddingProvider({ children }: PropsWithChildren) {
@@ -13,18 +12,22 @@ export function WeddingProvider({ children }: PropsWithChildren) {
     return saved ? JSON.parse(saved) : initialWeddingDetails;
   });
 
-  const [gifts, setGifts] = useState<Gift[]>([]);
+  const [gifts, setGifts] = useState<any[]>([]);
 
   useEffect(() => {
     const getInstruments = async () => {
-      if (gifts.length > 0) return;
+      try {
+        if (gifts.length > 0) return;
 
-      const data = await giftService.index();
-      setGifts(data ?? []);
+        const response = await api.get("/gift");
+        setGifts(response.data);
+      } catch (error) {
+        console.log(error);
+      }
     };
 
     getInstruments();
-  }, []);
+  }, [gifts.length]);
 
   useEffect(() => {
     localStorage.setItem("weddingDetails", JSON.stringify(weddingDetails));
