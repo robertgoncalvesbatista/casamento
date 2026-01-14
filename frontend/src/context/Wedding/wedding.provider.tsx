@@ -1,9 +1,9 @@
 import { PropsWithChildren, useEffect, useState } from "react";
 
 import { initialWeddingDetails } from "../../config/geral";
+import GiftService, { Gift } from "../../services/GiftService";
 import { WeddingDetails } from "../../types";
 
-import api from "../../config/api";
 import { WeddingContext } from "./wedding.context";
 
 export function WeddingProvider({ children }: PropsWithChildren) {
@@ -12,14 +12,14 @@ export function WeddingProvider({ children }: PropsWithChildren) {
     return saved ? JSON.parse(saved) : initialWeddingDetails;
   });
 
-  const [gifts, setGifts] = useState<any[]>([]);
+  const [gifts, setGifts] = useState<Gift[]>([]);
 
   useEffect(() => {
     const getInstruments = async () => {
       try {
         if (gifts.length > 0) return;
 
-        const response = await api.get("/gift");
+        const response = await GiftService.index();
         setGifts(response.data);
       } catch (error) {
         console.log(error);

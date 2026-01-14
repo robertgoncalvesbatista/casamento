@@ -6,18 +6,20 @@ import { ShoppingBag } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useWedding } from "../../context/Wedding/wedding.hook";
+
 import {
   ReserveGiftValidation,
   ReserveGiftValidator,
 } from "../../validators/ReserveGift";
+
+import GiftService from "../../services/GiftService";
+import GuestService from "../../services/GuestService";
 
 import Alert from "../ui/Alerts/Alert";
 import Button from "../ui/Button";
 import Card from "../ui/Card";
 import Input from "../ui/Input";
 import Modal, { ModalRef } from "../ui/Modal";
-
-import api from "../../config/api";
 
 type TAlert = {
   type: "error" | "success" | "warning";
@@ -47,13 +49,13 @@ export default function GiftList() {
         throw new Error("Selecione um presente");
       }
 
-      const responseGuest = await api.get("/guest", {
+      const responseGuest = await GuestService.index({
         params: { email: data.email?.trim() },
       });
 
       // Caso não exista um convidado, cria um
       if (responseGuest.data.length === 0) {
-        await api.post("/guest", {
+        await GuestService.create({
           name: data.nome.trim(),
           email: (data.email ?? "").trim(),
           telephone: (data.telefone ?? "").replace(/\D/g, "").trim(),
@@ -61,15 +63,13 @@ export default function GiftList() {
           giftId: selectedGift,
         });
       } else {
-        await axios.put(
-          "/guest",
+        await GuestService.update(
           { giftId: selectedGift },
           { params: { email: data.email?.trim() } }
         );
       }
 
-      await axios.put(
-        "/gift",
+      await GiftService.update(
         { reserved: true },
         { params: { id: selectedGift } }
       );
@@ -152,7 +152,7 @@ export default function GiftList() {
                 </p>
 
                 <div className="text-sky-700 font-medium mb-4">
-                  R$ {gift.price.toFixed(2)}
+                  R$ {parseFloat(gift.price).toFixed(2)}
                 </div>
 
                 <Button

@@ -23,3 +23,8 @@ export interface Event {
   description: string;
   icon: React.ReactNode;
 }
+
+export interface Response<T = unknown> {
+  statusCode: number;
+  data: T;
+}

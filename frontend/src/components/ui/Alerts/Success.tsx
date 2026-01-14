@@ -1,4 +1,4 @@
-export default function Success({ message }: { message: string }) {
+function Success({ message }: { message: string }) {
   return (
     <div
       id="alert-border-3"
@@ -43,3 +43,5 @@ export default function Success({ message }: { message: string }) {
     </div>
   );
 }
+
+export default Success;

@@ -1,4 +1,4 @@
-import { Gift } from "../../../generated/prisma/client";
+import { Gift } from "../../services/GiftService";
 import { WeddingDetails } from "../../types";
 
 export type WeddingContextData = {

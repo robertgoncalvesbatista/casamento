@@ -7,7 +7,7 @@ interface Props {
   type: "error" | "success" | "warning";
 }
 
-export default function Alert({ message, type }: Props) {
+function Alert({ message, type }: Props) {
   switch (type) {
     case "error":
       return <Error message={message} />;
@@ -22,3 +22,5 @@ export default function Alert({ message, type }: Props) {
       return <Success message={message} />;
   }
 }
+
+export default Alert;

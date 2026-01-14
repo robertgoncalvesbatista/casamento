@@ -18,16 +18,15 @@ const Modal = forwardRef<ModalRef, PropsWithChildren>(({ children }, ref) => {
     close: () => setOpen(false),
   }));
 
-  if (!!open)
-    return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 p-4">
-        <div className="bg-white rounded-lg shadow-lg p-6 max-w-md w-full">
-          {children}
-        </div>
-      </div>
-    );
+  if (!open) return null;
 
-  return null;
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 p-4">
+      <div className="bg-white rounded-lg shadow-lg p-6 max-w-md w-full">
+        {children}
+      </div>
+    </div>
+  );
 });
 
 export default Modal;

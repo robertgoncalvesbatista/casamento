@@ -1,4 +1,4 @@
-export default function Error({ message }: { message: string }) {
+function Error({ message }: { message: string }) {
   return (
     <div
       id="alert-border-2"
@@ -43,3 +43,5 @@ export default function Error({ message }: { message: string }) {
     </div>
   );
 }
+
+export default Error;

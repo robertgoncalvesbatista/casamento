@@ -4,7 +4,7 @@ interface ScrollDownProps {
   positionY: number;
 }
 
-export default function ScrollDown({ positionY }: ScrollDownProps) {
+function ScrollDown({ positionY }: ScrollDownProps) {
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -14,7 +14,7 @@ export default function ScrollDown({ positionY }: ScrollDownProps) {
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [positionY]);
 
   const scrollToPosition = () => {
     window.scrollTo({
@@ -39,3 +39,5 @@ export default function ScrollDown({ positionY }: ScrollDownProps) {
     </button>
   );
 }
+
+export default ScrollDown;

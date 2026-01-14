@@ -5,7 +5,7 @@ interface CardProps {
   className?: string;
 }
 
-export default function Card({ children, className = "" }: CardProps) {
+function Card({ children, className = "" }: CardProps) {
   return (
     <div
       className={`bg-white rounded-lg shadow-xl overflow-hidden ${className}`}
@@ -28,3 +28,5 @@ Card.Footer = ({ children, className = "" }: CardProps) => (
     {children}
   </div>
 );
+
+export default Card;

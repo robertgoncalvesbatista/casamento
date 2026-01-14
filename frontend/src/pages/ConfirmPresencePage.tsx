@@ -15,7 +15,7 @@ import Button from "../components/ui/Button";
 import Card from "../components/ui/Card";
 import Input from "../components/ui/Input";
 
-import api from "../config/api";
+import GuestService from "../services/GuestService";
 
 type TAlert = {
   type: "error" | "success" | "warning";
@@ -37,7 +37,7 @@ export default function ConfirmPresencePage() {
 
   const onSubmit = async (data: ReserveGiftValidator) => {
     try {
-      const responseGuest = await api.get("/guest", {
+      const responseGuest = await GuestService.index({
         params: { email: data.email?.trim() },
       });
 
@@ -52,25 +52,18 @@ export default function ConfirmPresencePage() {
           return;
         }
 
-        await api.put(
-          "/guest",
+        await GuestService.update(
           { confirmed: true },
           { params: { id: responseGuest.data[0].id } }
         );
-
-        setAlert({
-          type: "success",
-          message: "Sua presença foi confirmada com sucesso!",
+      } else {
+        await GuestService.create({
+          name: data.nome.trim(),
+          email: (data.email ?? "").trim(),
+          telephone: (data.telefone ?? "").replace(/\D/g, "").trim(),
+          confirmed: true,
         });
-        return;
       }
-
-      await api.post("/guest", {
-        name: data.nome.trim(),
-        email: (data.email ?? "").trim(),
-        telephone: (data.telefone ?? "").replace(/\D/g, "").trim(),
-        confirmed: true,
-      });
 
       setAlert({
         type: "success",

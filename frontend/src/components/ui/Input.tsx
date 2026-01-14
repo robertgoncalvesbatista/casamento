@@ -1,15 +1,15 @@
 import { InputHTMLAttributes } from "react";
-import { FieldValues, UseFormRegister } from "react-hook-form";
+import { UseFormRegister } from "react-hook-form";
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string;
-  register: UseFormRegister<FieldValues>;
+  register: UseFormRegister<any>;
   label?: string;
   error?: string;
   fullWidth?: boolean;
 }
 
-export default function Input({
+function Input({
   name,
   register,
   label,
@@ -53,3 +53,5 @@ export default function Input({
     </div>
   );
 }
+
+export default Input;

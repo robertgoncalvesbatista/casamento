@@ -1,4 +1,4 @@
-export default function Warning({ message }: { message: string }) {
+function Warning({ message }: { message: string }) {
   return (
     <div
       id="alert-border-4"
@@ -43,3 +43,5 @@ export default function Warning({ message }: { message: string }) {
     </div>
   );
 }
+
+export default Warning;

@@ -2,7 +2,7 @@ import { Heart } from "lucide-react";
 
 import { initialWeddingDetails } from "../../config/geral";
 
-export default function Footer() {
+function Footer() {
   const year = new Date().getFullYear();
 
   return (
@@ -27,3 +27,5 @@ export default function Footer() {
     </footer>
   );
 }
+
+export default Footer;
