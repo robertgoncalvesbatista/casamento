@@ -17,7 +17,7 @@ const config: Config = {
   databaseURL:
     process.env.DATABASE_URL ||
     "postgres://d2570495de363aa7b2068e2c74d9e4dd1cce2722f966d7496f06bb6dd802013c:sk_pL0qO5nMqaRiSiulUVewI@db.prisma.io:5432/postgres?sslmode=require",
-  corsOrigin: process.env.CORS_ORIGIN || "",
+  corsOrigin: process.env.CORS_ORIGIN || "*",
 };
 
 const adapter = new PrismaPg({
