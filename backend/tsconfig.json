@@ -1,47 +1,39 @@
 {
-  // Visit https://aka.ms/tsconfig to read more about this file
   "compilerOptions": {
-    // File Layout
-    // "rootDir": "./src",
-    // "outDir": "./dist",
+    // Layout dos Arquivos
+    "rootDir": ".", // Diretório raiz dos arquivos fonte TypeScript
+    "outDir": "./dist", // Diretório onde os arquivos JavaScript compilados serão salvos
 
-    // Environment Settings
-    // See also https://aka.ms/tsconfig/module
-    "module": "nodenext",
-    "target": "esnext",
-    "types": [],
-    // For nodejs:
-    // "lib": ["esnext"],
-    // "types": ["node"],
-    // and npm install -D @types/node
+    // Configurações de Ambiente
+    "module": "nodenext", // Sistema de módulos usado (Node.js com suporte a ESM)
+    "target": "esnext", // Versão alvo do JavaScript (mais recente)
+    "types": [], // Lista de tipos a incluir (vazia para evitar tipos globais desnecessários)
 
-    // Other Outputs
-    "sourceMap": true,
-    "declaration": true,
-    "declarationMap": true,
+    // Outras Saídas
+    "sourceMap": true, // Gerar mapas de fonte para depuração
+    "declaration": false, // Não gerar arquivos de declaração (.d.ts)
+    "declarationMap": false, // Não gerar mapas para declarações
 
-    // Stricter Typechecking Options
-    "noUncheckedIndexedAccess": true,
-    "exactOptionalPropertyTypes": true,
+    // Opções de Verificação de Tipos Mais Rigorosas
+    "noUncheckedIndexedAccess": true, // Verificar acesso indexado não verificado
+    "exactOptionalPropertyTypes": true, // Tipos opcionais exatos
 
-    // Style Options
-    // "noImplicitReturns": true,
-    // "noImplicitOverride": true,
-    // "noUnusedLocals": true,
-    // "noUnusedParameters": true,
-    // "noFallthroughCasesInSwitch": true,
-    // "noPropertyAccessFromIndexSignature": true,
-
-    // Recommended Options
-    "strict": true,
-    "jsx": "react-jsx",
-    "verbatimModuleSyntax": true,
-    "isolatedModules": true,
-    "noUncheckedSideEffectImports": true,
-    "moduleDetection": "force",
-    "skipLibCheck": true,
-    "allowImportingTsExtensions": true,
-    "noEmit": true,
-    "moduleResolution": "nodenext"
-  }
+    // Opções Recomendadas
+    "strict": true, // Habilitar modo estrito de verificação de tipos
+    "verbatimModuleSyntax": true, // Preservar sintaxe de módulo verbatim
+    "isolatedModules": true, // Tratar cada arquivo como módulo isolado
+    "noUncheckedSideEffectImports": true, // Verificar imports que podem ter efeitos colaterais
+    "moduleDetection": "force", // Forçar detecção de módulos
+    "skipLibCheck": true, // Pular verificação de arquivos de biblioteca
+    "allowImportingTsExtensions": true, // Permitir imports com extensões .ts
+    "rewriteRelativeImportExtensions": true, // Reescrever extensões relativas de .ts para .js na saída
+    "moduleResolution": "nodenext" // Estratégia de resolução de módulos para Node.js
+  },
+  "include": [
+    "src/**/*.ts", // Incluir todos os arquivos .ts no diretório src
+    "generated/prisma/**/*.ts" // Incluir arquivos gerados pelo Prisma
+  ],
+  "exclude": [
+    "node_modules" // Excluir o diretório node_modules
+  ]
 }
