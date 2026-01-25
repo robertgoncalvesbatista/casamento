@@ -31,8 +31,6 @@ model Guest {
   id Int @id @default(autoincrement())
 
   name      String
-  email     String  @unique
-  telephone String
   confirmed Boolean @default(false)
   giftId    Int?
 

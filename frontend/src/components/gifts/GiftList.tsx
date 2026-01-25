@@ -50,44 +50,37 @@ export default function GiftList() {
       }
 
       const responseGuest = await GuestService.index({
-        params: { email: data.email?.trim() },
+        params: { name: data.nome?.trim() },
       });
 
-      // Caso não exista um convidado, cria um
       if (responseGuest.data.length === 0) {
-        await GuestService.create({
-          name: data.nome.trim(),
-          email: (data.email ?? "").trim(),
-          telephone: (data.telefone ?? "").replace(/\D/g, "").trim(),
-          confirmed: true,
-          giftId: selectedGift,
-        });
+        throw new Error("Esta pessoa não foi convidada ou o nome informado está incorreto.");
       } else {
         await GuestService.update(
           { giftId: selectedGift },
-          { params: { email: data.email?.trim() } }
+          { params: { name: data.nome?.trim() } }
         );
-      }
 
-      await GiftService.update(
-        { reserved: true },
-        { params: { id: selectedGift } }
-      );
+        await GiftService.update(
+          { reserved: true },
+          { params: { id: selectedGift } }
+        );
 
-      setAlert({
-        type: "success",
-        message: "Presente reservado com sucesso!",
-      });
-
-      setGifts((prev) => {
-        return prev.map((gift) => {
-          if (Number(gift.id) === selectedGift) {
-            return { ...gift, reserved: true };
-          }
-
-          return gift;
+        setAlert({
+          type: "success",
+          message: "Presente reservado com sucesso!",
         });
-      });
+
+        setGifts((prev) => {
+          return prev.map((gift) => {
+            if (Number(gift.id) === selectedGift) {
+              return { ...gift, reserved: true };
+            }
+
+            return gift;
+          });
+        });
+      }
 
       modalReservarPresenteRef.current?.close();
     } catch (error: any) {
@@ -110,8 +103,6 @@ export default function GiftList() {
 
   return (
     <div>
-      {!!alert && <Alert message={alert.message} type={alert.type} />}
-
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {gifts.map((gift) => {
           return (
@@ -182,9 +173,12 @@ export default function GiftList() {
         })}
       </div>
 
+
       {/* Modal para reservar presente */}
       <Modal ref={modalReservarPresenteRef}>
         <>
+          {!!alert && <Alert message={alert.message} type={alert.type} />}
+
           <h3 className="text-xl font-semibold text-gray-800 mb-4">
             Reservar presente
           </h3>
@@ -198,28 +192,10 @@ export default function GiftList() {
               <Input
                 fullWidth
                 name="nome"
-                label="Nome"
+                label="Nome completo"
                 placeholder="John Doe"
                 register={register}
                 error={errors.nome?.message}
-              />
-
-              <Input
-                fullWidth
-                name="email"
-                label="Email"
-                placeholder="johndoe@gmail.com"
-                register={register}
-                error={errors.email?.message || errors.contatos?.message}
-              />
-
-              <Input
-                fullWidth
-                name="telefone"
-                label="Telefone"
-                placeholder="+55 (00) 00000-0000"
-                register={register}
-                error={errors.telefone?.message || errors.contatos?.message}
               />
             </div>
 

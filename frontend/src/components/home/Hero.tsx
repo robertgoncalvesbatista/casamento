@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-import Photo from "../../assets/img/talking.png";
+import Photo from "../../assets/img/restaurante.png";
 import { initialWeddingDetails } from "../../config/geral";
 
 import Button from "../ui/Button";

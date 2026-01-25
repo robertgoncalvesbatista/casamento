@@ -38,37 +38,26 @@ export default function ConfirmPresencePage() {
   const onSubmit = async (data: ReserveGiftValidator) => {
     try {
       const responseGuest = await GuestService.index({
-        params: { email: data.email?.trim() },
+        params: { name: data.nome },
       });
 
-      // Verifica se este convidado já existe
-      if (responseGuest.data.length > 0) {
-        // Verifica se o convidado já confirmou presença
-        if (responseGuest.data[0].confirmed) {
-          setAlert({
-            type: "warning",
-            message: "Convidado já confirmou presença.",
-          });
-          return;
-        }
-
-        await GuestService.update(
-          { confirmed: true },
-          { params: { id: responseGuest.data[0].id } }
-        );
+      if (responseGuest.data.length === 0) {
+        throw new Error("Esta pessoa não foi convidada ou o nome informado está incorreto.");
       } else {
-        await GuestService.create({
-          name: data.nome.trim(),
-          email: (data.email ?? "").trim(),
-          telephone: (data.telefone ?? "").replace(/\D/g, "").trim(),
-          confirmed: true,
-        });
-      }
+        if (responseGuest.data[0].confirmed) {
+          throw new Error("O convidado já confirmou sua presença.");
+        } else {
+          await GuestService.update(
+            { confirmed: true },
+            { params: { id: responseGuest.data[0].id } }
+          );
 
-      setAlert({
-        type: "success",
-        message: "Sua presença foi confirmada com sucesso!",
-      });
+          setAlert({
+            type: "success",
+            message: "Sua presença foi confirmada com sucesso!",
+          });
+        }
+      }
     } catch (error: any) {
       setAlert({
         type: "error",
@@ -96,6 +85,7 @@ export default function ConfirmPresencePage() {
 
           <Card className="h-full flex flex-col max-w-6xl mx-auto border border-gray-300">
             <Card.Body className="flex-grow flex flex-col">
+
               <h3 className="text-lg font-semibold text-gray-800 mb-4">
                 Confirmação de Presença
               </h3>
@@ -112,28 +102,10 @@ export default function ConfirmPresencePage() {
                   <Input
                     fullWidth
                     name="nome"
-                    label="Nome"
+                    label="Nome completo"
                     placeholder="John Doe"
                     register={register}
                     error={errors.nome?.message}
-                  />
-
-                  <Input
-                    fullWidth
-                    name="email"
-                    label="Email"
-                    placeholder="johndoe@gmail.com"
-                    register={register}
-                    error={errors.email?.message || errors.contatos?.message}
-                  />
-
-                  <Input
-                    fullWidth
-                    name="telefone"
-                    label="Telefone"
-                    placeholder="+55 (00) 00000-0000"
-                    register={register}
-                    error={errors.telefone?.message || errors.contatos?.message}
                   />
                 </div>
 
@@ -149,7 +121,7 @@ export default function ConfirmPresencePage() {
                   </Button>
 
                   <Button variant="primary" type="submit">
-                    Confirmar Presença
+                    Confirmar presença
                   </Button>
                 </div>
               </form>

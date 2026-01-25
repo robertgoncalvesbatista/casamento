@@ -5,7 +5,7 @@ import { CakeSlice, Clock, Heart, Music } from "lucide-react";
 import { Event, WeddingDetails } from "../types";
 
 export const initialWeddingDetails: WeddingDetails = {
-  coupleName: "Millena & Robert",
+  coupleName: "Robert & Millena",
   date: "19 de julho de 2026",
   venue: "Cerimonial Fina Estampa",
   address: "Rua Colibris, nº 146, Bicanga, Serra - ES",
