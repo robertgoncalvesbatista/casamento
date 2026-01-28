@@ -18,7 +18,7 @@ class GuestController {
   async read(
     req: Request,
     res: GuestResponse<Guest | null>,
-    _next: NextFunction
+    _next: NextFunction,
   ) {
     const where = { id: Number(req.params.id) };
     const data = await guestService.read(where);
@@ -29,7 +29,7 @@ class GuestController {
   async create(
     req: Request,
     res: GuestResponse<Guest | null>,
-    _next: NextFunction
+    _next: NextFunction,
   ) {
     const data = await guestService.create(req.body);
 
@@ -39,7 +39,7 @@ class GuestController {
   async update(
     req: Request,
     res: GuestResponse<Guest | null>,
-    _next: NextFunction
+    _next: NextFunction,
   ) {
     const where = { id: Number(req.params.id) };
     const data = await guestService.update(req.body, where);
@@ -50,7 +50,7 @@ class GuestController {
   async delete(
     req: Request,
     res: GuestResponse<{ message: string }>,
-    _next: NextFunction
+    _next: NextFunction,
   ) {
     const where = { id: Number(req.params.id) };
     await guestService.delete(where);

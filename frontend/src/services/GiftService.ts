@@ -21,7 +21,7 @@ class GiftService {
 
   async create(
     data: Record<string, string | number | boolean | null>,
-    config?: Axios.AxiosXHRConfigBase<unknown> | undefined
+    config?: Axios.AxiosXHRConfigBase<unknown> | undefined,
   ) {
     const response = await api.post<Response<Gift>>("/gift", data, config);
     return response;
@@ -33,16 +33,17 @@ class GiftService {
   }
 
   async update(
+    id: string | number,
     data: Record<string, string | number | boolean | null>,
-    config?: Axios.AxiosXHRConfigBase<unknown> | undefined
+    config?: Axios.AxiosXHRConfigBase<unknown> | undefined,
   ) {
-    const response = await api.put<Response<Gift>>("/gift", data, config);
+    const response = await api.put<Response<Gift>>(`/gift/${id}`, data, config);
     return response.data;
   }
 
   async delete(id: string | number) {
     const response = await api.delete<Response<{ message: string }>>(
-      `/gift/${id}`
+      `/gift/${id}`,
     );
     return response.data;
   }

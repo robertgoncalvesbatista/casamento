@@ -42,15 +42,16 @@ export default function ConfirmPresencePage() {
       });
 
       if (responseGuest.data.length === 0) {
-        throw new Error("Esta pessoa não foi convidada ou o nome informado está incorreto.");
+        throw new Error(
+          "Esta pessoa não foi convidada ou o nome informado está incorreto.",
+        );
       } else {
         if (responseGuest.data[0].confirmed) {
           throw new Error("O convidado já confirmou sua presença.");
         } else {
-          await GuestService.update(
-            { confirmed: true },
-            { params: { id: responseGuest.data[0].id } }
-          );
+          const { id } = responseGuest.data[0];
+
+          await GuestService.update(id, { confirmed: true });
 
           setAlert({
             type: "success",
@@ -85,7 +86,6 @@ export default function ConfirmPresencePage() {
 
           <Card className="h-full flex flex-col max-w-6xl mx-auto border border-gray-300">
             <Card.Body className="flex-grow flex flex-col">
-
               <h3 className="text-lg font-semibold text-gray-800 mb-4">
                 Confirmação de Presença
               </h3>

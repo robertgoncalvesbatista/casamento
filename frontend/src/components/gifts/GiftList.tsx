@@ -7,6 +7,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useWedding } from "../../context/Wedding/wedding.hook";
 
+import Loading from "../../assets/img/c7e1b7b5753737039e1bdbda578132b8.gif";
+
 import {
   ReserveGiftValidation,
   ReserveGiftValidator,
@@ -27,7 +29,7 @@ type TAlert = {
 };
 
 export default function GiftList() {
-  const { gifts, setGifts } = useWedding();
+  const { gifts, setGifts, giftsIsLoading } = useWedding();
 
   const modalReservarPresenteRef = useRef<ModalRef>(null);
 
@@ -54,17 +56,19 @@ export default function GiftList() {
       });
 
       if (responseGuest.data.length === 0) {
-        throw new Error("Esta pessoa não foi convidada ou o nome informado está incorreto.");
+        throw new Error(
+          "Esta pessoa não foi convidada ou o nome informado está incorreto.",
+        );
       } else {
-        await GuestService.update(
-          { giftId: selectedGift },
-          { params: { name: data.nome?.trim() } }
-        );
+        const { id } = responseGuest.data[0];
 
-        await GiftService.update(
-          { reserved: true },
-          { params: { id: selectedGift } }
-        );
+        await GuestService.update(id, {
+          giftId: selectedGift,
+        });
+
+        await GiftService.update(id, {
+          reserved: true,
+        });
 
         setAlert({
           type: "success",
@@ -104,75 +108,88 @@ export default function GiftList() {
   return (
     <div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {gifts.map((gift) => {
-          return (
-            <Card
-              key={gift.id}
-              className="h-full flex flex-col border border-gray-300"
-            >
-              <div className="relative h-48 overflow-hidden">
-                <img
-                  src={gift.image}
-                  alt={gift.name}
-                  className="w-full h-full object-cover cursor-pointer"
-                  onClick={() => {
-                    window.open(
-                      gift.link,
-                      "_blank",
-                      "location=yes,height=570,width=520,scrollbars=yes,status=yes"
-                    );
-                  }}
-                />
+        {!!giftsIsLoading && (
+          <div className="col-span-3 flex justify-center items-center">
+            <img
+              src={Loading}
+              alt="Carregando lista de presentes..."
+              style={{ mixBlendMode: "multiply" }}
+            />
+          </div>
+        )}
 
-                {gift.reserved && (
-                  <div className="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center">
-                    <div className="bg-white px-4 py-2 rounded-full text-sky-700 font-medium">
-                      Presente reservado
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              <Card.Body className="flex-grow flex flex-col">
-                <h3 className="text-lg font-semibold text-gray-800 mb-2">
-                  {gift.name}
-                </h3>
-
-                <p className="text-gray-600 mb-2 text-sm flex-grow">
-                  {gift.description}
-                </p>
-
-                <div className="text-sky-700 font-medium mb-4">
-                  R$ {parseFloat(gift.price).toFixed(2)}
-                </div>
-
-                <Button
-                  variant="primary"
-                  fullWidth
-                  disabled={gift.reserved}
-                  className={
-                    gift.reserved ? "bg-gray-400 cursor-not-allowed" : ""
-                  }
-                  onClick={() => {
-                    setSelectedGift(Number(gift.id));
-                    modalReservarPresenteRef.current?.open();
-                  }}
+        {!giftsIsLoading && (
+          <>
+            {gifts.map((gift) => {
+              return (
+                <Card
+                  key={gift.id}
+                  className="h-full flex flex-col border border-gray-300"
                 >
-                  {!!gift.reserved && "Reservado"}
+                  <div className="relative h-48 overflow-hidden">
+                    <img
+                      src={gift.image}
+                      alt={gift.name}
+                      className="w-full h-full object-cover cursor-pointer"
+                      onClick={() => {
+                        window.open(
+                          gift.link,
+                          "_blank",
+                          "location=yes,height=570,width=520,scrollbars=yes,status=yes",
+                        );
+                      }}
+                    />
 
-                  {!gift.reserved && (
-                    <>
-                      <ShoppingBag className="w-4 h-4 mr-2" />
-                      Reservar presente
-                    </>
-                  )}
-                </Button>
-              </Card.Body>
-            </Card>
-          );
-        })}
+                    {gift.reserved && (
+                      <div className="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center">
+                        <div className="bg-white px-4 py-2 rounded-full text-sky-700 font-medium">
+                          Presente reservado
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  <Card.Body className="flex-grow flex flex-col">
+                    <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                      {gift.name}
+                    </h3>
+
+                    <p className="text-gray-600 mb-2 text-sm flex-grow">
+                      {gift.description}
+                    </p>
+
+                    <div className="text-sky-700 font-medium mb-4">
+                      R$ {parseFloat(gift.price).toFixed(2)}
+                    </div>
+
+                    <Button
+                      variant="primary"
+                      fullWidth
+                      disabled={gift.reserved}
+                      className={
+                        gift.reserved ? "bg-gray-400 cursor-not-allowed" : ""
+                      }
+                      onClick={() => {
+                        setSelectedGift(Number(gift.id));
+                        modalReservarPresenteRef.current?.open();
+                      }}
+                    >
+                      {!!gift.reserved && "Reservado"}
+
+                      {!gift.reserved && (
+                        <>
+                          <ShoppingBag className="w-4 h-4 mr-2" />
+                          Reservar presente
+                        </>
+                      )}
+                    </Button>
+                  </Card.Body>
+                </Card>
+              );
+            })}
+          </>
+        )}
       </div>
-
 
       {/* Modal para reservar presente */}
       <Modal ref={modalReservarPresenteRef}>
