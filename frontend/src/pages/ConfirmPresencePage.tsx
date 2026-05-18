@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
+import { CalendarHeart } from "lucide-react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -12,7 +14,6 @@ import {
 import Layout from "../components/layout/Layout";
 import Alert from "../components/ui/Alerts/Alert";
 import Button from "../components/ui/Button";
-import Card from "../components/ui/Card";
 import Input from "../components/ui/Input";
 
 import GuestService from "../services/GuestService";
@@ -30,7 +31,7 @@ export default function ConfirmPresencePage() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<ReserveGiftValidator>({
     resolver: zodResolver(ReserveGiftValidation),
   });
@@ -45,20 +46,18 @@ export default function ConfirmPresencePage() {
         throw new Error(
           "Esta pessoa não foi convidada ou o nome informado está incorreto.",
         );
-      } else {
-        if (responseGuest.data[0].confirmed) {
-          throw new Error("O convidado já confirmou sua presença.");
-        } else {
-          const { id } = responseGuest.data[0];
-
-          await GuestService.update(id, { confirmed: true });
-
-          setAlert({
-            type: "success",
-            message: "Sua presença foi confirmada com sucesso!",
-          });
-        }
       }
+
+      if (responseGuest.data[0].confirmed) {
+        throw new Error("O convidado já confirmou sua presença.");
+      }
+
+      await GuestService.update(responseGuest.data[0].id, { confirmed: true });
+
+      setAlert({
+        type: "success",
+        message: "Sua presença foi confirmada com sucesso!",
+      });
     } catch (error: any) {
       setAlert({
         type: "error",
@@ -68,73 +67,96 @@ export default function ConfirmPresencePage() {
   };
 
   useEffect(() => {
-    if (alert) {
-      setTimeout(() => {
-        setAlert(undefined);
-      }, 5000);
-    }
-  });
+    if (!alert) return;
+    const timer = setTimeout(() => setAlert(undefined), 5000);
+    return () => clearTimeout(timer);
+  }, [alert]);
 
   return (
     <Layout>
-      <div
-        className="container mx-auto px-4 flex items-center"
-        style={{ height: "calc(100vh - 192px)" }}
-      >
-        <div className="max-w-6xl mx-auto">
-          {!!alert && <Alert message={alert.message} type={alert.type} />}
+      <Helmet>
+        <title>Confirmar Presença — Robert & Millena</title>
+        <meta
+          name="description"
+          content="Confirme sua presença no casamento de Robert e Millena no dia 19 de julho de 2026."
+        />
+      </Helmet>
 
-          <Card className="h-full flex flex-col max-w-6xl mx-auto border border-gray-300">
-            <Card.Body className="flex-grow flex flex-col">
-              <h3 className="text-lg font-semibold text-gray-800 mb-4">
-                Confirmação de Presença
-              </h3>
+      <div className="min-h-screen bg-neutral-50 flex items-center justify-center pt-20 pb-12 px-4">
+        <div className="w-full max-w-lg">
+          {/* Header */}
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary-50 mb-4">
+              <CalendarHeart size={28} className="text-primary-600" />
+            </div>
+            <p className="font-script text-3xl text-primary-500 mb-1">
+              Aguardamos você
+            </p>
+            <h1 className="text-3xl font-serif text-neutral-800">
+              Confirmação de Presença
+            </h1>
+          </div>
 
-              <p className="text-gray-600 mb-4 text-sm flex-grow max-w-md">
-                Sua presença é muito importante para nós! Por favor, confirme
-                sua participação para que possamos preparar tudo com carinho.
-                Aguardamos você para celebrar esse momento tão especial ao nosso
-                lado! 💍✨
+          {/* Card */}
+          <div className="bg-white rounded-3xl shadow-sm border border-neutral-100 overflow-hidden">
+            <div className="p-8">
+              {alert && (
+                <Alert
+                  message={alert.message}
+                  type={alert.type}
+                  onClose={() => setAlert(undefined)}
+                />
+              )}
+
+              <p className="text-neutral-500 mb-6 leading-relaxed text-sm">
+                Sua presença é muito importante para nós! Por favor, informe seu
+                nome completo como consta na lista de convidados para confirmar
+                sua participação.
               </p>
 
               <form onSubmit={handleSubmit(onSubmit)} noValidate>
-                <div className="mb-2">
+                <div className="mb-5">
                   <Input
                     fullWidth
                     name="nome"
                     label="Nome completo"
-                    placeholder="John Doe"
+                    placeholder="Como consta na lista de convidados"
                     register={register}
                     error={errors.nome?.message}
                   />
                 </div>
 
-                <div className="flex justify-end">
+                <div className="flex flex-col sm:flex-row gap-3">
                   <Button
-                    className="mr-2"
                     variant="outline"
-                    onClick={() => {
-                      navigate("/");
-                    }}
+                    fullWidth
+                    onClick={() => navigate("/")}
+                    type="button"
                   >
                     Cancelar
                   </Button>
 
-                  <Button variant="primary" type="submit">
-                    Confirmar presença
+                  <Button
+                    variant="primary"
+                    fullWidth
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="bg-primary-600 hover:bg-primary-700"
+                  >
+                    {isSubmitting ? "Confirmando..." : "Confirmar presença"}
                   </Button>
                 </div>
               </form>
-            </Card.Body>
+            </div>
 
-            <Card.Footer>
-              <p className="text-gray-600 text-sm flex-grow max-w-md">
-                Se você precisar ajustar sua presença ou mudar o presente, é só
-                entrar em contato conosco. Pedimos a gentileza de nos avisar com
-                pelo menos um mês de antecedência da data do casamento.
+            <div className="px-8 py-5 bg-neutral-50 border-t border-neutral-100">
+              <p className="text-neutral-400 text-xs leading-relaxed">
+                Se precisar ajustar sua presença ou mudar o presente, entre em
+                contato conosco. Pedimos a gentileza de nos avisar com pelo
+                menos um mês de antecedência.
               </p>
-            </Card.Footer>
-          </Card>
+            </div>
+          </div>
         </div>
       </div>
     </Layout>

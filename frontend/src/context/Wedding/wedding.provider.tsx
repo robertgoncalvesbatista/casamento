@@ -42,8 +42,9 @@ export function WeddingProvider({ children }: PropsWithChildren) {
         maxAttempts,
         "tentativas",
       );
+      setGiftsIsLoading(false);
     } catch {
-      console.log("oi");
+      setGiftsIsLoading(false);
     }
   }, [gifts.length]);
 

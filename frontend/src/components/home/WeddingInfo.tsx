@@ -1,48 +1,75 @@
 import { CalendarClock, Heart, MapPin } from "lucide-react";
 
 import { initialWeddingDetails } from "../../config/geral";
+import { useScrollAnimation } from "../../hooks/useScrollAnimation";
 
 export default function WeddingInfo() {
+  const titleRef = useScrollAnimation<HTMLDivElement>();
+  const cardsRef = useScrollAnimation<HTMLDivElement>();
+
   return (
-    <section className="py-20 bg-white">
+    <section className="py-20 md:py-28 bg-white" aria-labelledby="wedding-info-heading">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-serif text-center text-sky-800 mb-16">
-            Nosso Grande Dia
-          </h2>
+          <div ref={titleRef} className="reveal reveal-up text-center mb-16">
+            <h2
+              id="wedding-info-heading"
+              className="text-3xl md:text-4xl font-serif text-primary-800 section-heading"
+            >
+              Nosso Grande Dia
+            </h2>
+          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="flex flex-col items-center text-center p-6 rounded-lg bg-neutral-50 shadow-sm hover:shadow-md transition-shadow">
-              <div className="w-16 h-16 rounded-full bg-primary-100 flex items-center justify-center mb-4">
-                <CalendarClock className="w-8 h-8 text-primary-600" />
+          <div
+            ref={cardsRef}
+            className="reveal-stagger grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8"
+          >
+            {/* Data e Hora */}
+            <div className="flex flex-col items-center text-center p-8 rounded-2xl bg-neutral-50 border border-neutral-100 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 group">
+              <div className="w-16 h-16 rounded-full bg-primary-50 flex items-center justify-center mb-5 group-hover:bg-primary-100 transition-colors duration-300">
+                <CalendarClock className="w-7 h-7 text-primary-600" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">
+              <h3 className="text-lg font-semibold text-neutral-800 mb-2">
                 Data e Hora
               </h3>
-              <p className="text-gray-600">{initialWeddingDetails.date}</p>
-              <p className="text-gray-600">A partir das 15:30</p>
+              <p className="text-neutral-600 font-medium">
+                {initialWeddingDetails.date}
+              </p>
+              <p className="text-neutral-500 text-sm mt-1">
+                A partir das 15:30
+              </p>
             </div>
 
-            <div className="flex flex-col items-center text-center p-6 rounded-lg bg-neutral-50 shadow-sm hover:shadow-md transition-shadow">
-              <div className="w-16 h-16 rounded-full bg-primary-100 flex items-center justify-center mb-4">
-                <MapPin className="w-8 h-8 text-primary-600" />
+            {/* Local */}
+            <div className="flex flex-col items-center text-center p-8 rounded-2xl bg-neutral-50 border border-neutral-100 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 group">
+              <div className="w-16 h-16 rounded-full bg-primary-50 flex items-center justify-center mb-5 group-hover:bg-primary-100 transition-colors duration-300">
+                <MapPin className="w-7 h-7 text-primary-600" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">
+              <h3 className="text-lg font-semibold text-neutral-800 mb-2">
                 Local
               </h3>
-              <p className="text-gray-600">{initialWeddingDetails.venue}</p>
-              <p className="text-gray-600">{initialWeddingDetails.address}</p>
+              <p className="text-neutral-600 font-medium">
+                {initialWeddingDetails.venue}
+              </p>
+              <p className="text-neutral-500 text-sm mt-1">
+                {initialWeddingDetails.address}
+              </p>
             </div>
 
-            <div className="flex flex-col items-center text-center p-6 rounded-lg bg-neutral-50 shadow-sm hover:shadow-md transition-shadow">
-              <div className="w-16 h-16 rounded-full bg-primary-100 flex items-center justify-center mb-4">
-                <Heart className="w-8 h-8 text-primary-600 fill-primary-600" />
+            {/* Celebração */}
+            <div className="flex flex-col items-center text-center p-8 rounded-2xl bg-neutral-50 border border-neutral-100 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 group">
+              <div className="w-16 h-16 rounded-full bg-primary-50 flex items-center justify-center mb-5 group-hover:bg-primary-100 transition-colors duration-300">
+                <Heart className="w-7 h-7 text-primary-600 fill-primary-600" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">
+              <h3 className="text-lg font-semibold text-neutral-800 mb-2">
                 Celebração
               </h3>
-              <p className="text-gray-600">Cerimônia e Recepção</p>
-              <p className="text-gray-600">Traje: Esporte Fino</p>
+              <p className="text-neutral-600 font-medium">
+                Cerimônia e Recepção
+              </p>
+              <p className="text-neutral-500 text-sm mt-1">
+                Traje: Esporte Fino
+              </p>
             </div>
           </div>
         </div>

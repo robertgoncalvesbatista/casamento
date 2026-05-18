@@ -98,12 +98,10 @@ export default function GiftList() {
   };
 
   useEffect(() => {
-    if (alert) {
-      setTimeout(() => {
-        setAlert(undefined);
-      }, 5000);
-    }
-  });
+    if (!alert) return;
+    const timer = setTimeout(() => setAlert(undefined), 5000);
+    return () => clearTimeout(timer);
+  }, [alert]);
 
   return (
     <div>
@@ -194,7 +192,7 @@ export default function GiftList() {
       {/* Modal para reservar presente */}
       <Modal ref={modalReservarPresenteRef}>
         <>
-          {!!alert && <Alert message={alert.message} type={alert.type} />}
+          {!!alert && <Alert message={alert.message} type={alert.type} onClose={() => setAlert(undefined)} />}
 
           <h3 className="text-xl font-semibold text-gray-800 mb-4">
             Reservar presente

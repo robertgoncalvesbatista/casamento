@@ -1,96 +1,146 @@
+import { Helmet } from "react-helmet-async";
+
 import Layout from "../components/layout/Layout";
 
-import BancoLavandario from "../assets/img/banco-lavandario.jpeg";
+import BancoLavandario from "../assets/img/DSC06800.jpg";
 import ColheitaMorangos from "../assets/img/colheita-morangos.jpeg";
 import Coracao from "../assets/img/coracao.jpeg";
 import Lavandario from "../assets/img/lavandario.jpeg";
 import Photo from "../assets/img/photo.jpeg";
 
 import { initialWeddingDetails } from "../config/geral";
+import { useScrollAnimation } from "../hooks/useScrollAnimation";
 
 export default function StoryPage() {
+  const headerRef = useScrollAnimation<HTMLDivElement>();
+  const para1Ref = useScrollAnimation<HTMLDivElement>();
+  const gridRef = useScrollAnimation<HTMLDivElement>();
+  const para2Ref = useScrollAnimation<HTMLDivElement>();
+
   return (
     <Layout>
-      <div className="bg-neutral-50 py-20">
+      <Helmet>
+        <title>Nossa História — Robert & Millena</title>
+        <meta
+          name="description"
+          content="Conheça a história de amor de Robert e Millena — como se conheceram, o pedido de noivado em Domingos Martins, e a jornada até o casamento."
+        />
+      </Helmet>
+
+      <div className="bg-neutral-50 pt-28 pb-20">
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <h1
-              className="text-4xl md:text-5xl font-serif text-center text-sky-800 mb-12"
-              id="nossa-historia"
-            >
-              Nossa História
-            </h1>
+          <div className="max-w-3xl mx-auto">
+            {/* Header */}
+            <div ref={headerRef} className="reveal reveal-up text-center mb-12">
+              <p className="font-script text-3xl text-primary-500 mb-2">
+                Uma história de amor
+              </p>
+              <h1 className="text-4xl md:text-5xl font-serif text-neutral-800">
+                Nossa História
+              </h1>
+              <div className="flex items-center justify-center gap-3 mt-4 text-neutral-400">
+                <div className="h-px w-12 bg-current opacity-30" />
+                <span className="text-primary-400">♥</span>
+                <div className="h-px w-12 bg-current opacity-30" />
+              </div>
+            </div>
 
-            <div className="bg-white p-8 rounded-lg shadow-sm">
-              <div className="mb-8">
-                <img
-                  src={Photo}
-                  alt="Casal apaixonado"
-                  className="w-72 h-[250px] object-cover rounded-lg float-left mr-4"
-                />
+            <div className="bg-white rounded-3xl shadow-sm border border-neutral-100 overflow-hidden">
+              {/* First text block with photo */}
+              <div ref={para1Ref} className="reveal reveal-up p-8 md:p-12">
+                <div className="flex flex-col sm:flex-row gap-6 items-start">
+                  <div className="img-zoom flex-shrink-0 w-full sm:w-64 rounded-2xl overflow-hidden shadow-md aspect-[4/3]">
+                    <img
+                      src={Photo}
+                      alt="Casal apaixonado"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
 
-                <div>
-                  <p className="text-gray-600 mb-6 leading-relaxed text-justify">
-                    {initialWeddingDetails.story}
-                  </p>
-
-                  <p className="text-gray-600 mb-6 leading-relaxed text-justify">
-                    Estamos noivos! E mal podemos esperar para começar a nossa
-                    vida juntos com Deus. Em breve celebraremos esse momento tão
-                    especial com vocês!
-                  </p>
+                  <div className="flex-1">
+                    <p className="text-neutral-600 leading-relaxed text-base md:text-lg mb-4">
+                      {initialWeddingDetails.story}
+                    </p>
+                    <p className="text-neutral-600 leading-relaxed">
+                      Estamos noivos! E mal podemos esperar para começar a nossa
+                      vida juntos com Deus. Em breve celebraremos esse momento
+                      tão especial com vocês!
+                    </p>
+                  </div>
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 my-8">
-                <img
-                  src={Lavandario}
-                  alt="Lavandário"
-                  className="w-full h-[250px] object-cover rounded-lg"
-                />
-                <img
-                  src={BancoLavandario}
-                  alt="Banco no lavandário"
-                  className="w-full h-[250px] object-cover rounded-lg"
-                />
-                <img
-                  src={ColheitaMorangos}
-                  alt="Colheita de morangos"
-                  className="w-full h-[250px] object-cover rounded-lg"
-                />
-              </div>
-
-              <div className="mb-8">
-                <img
-                  src={Coracao}
-                  alt="Momentos do casal"
-                  className="w-72 h-[250px] object-cover rounded-lg float-right ml-4"
-                />
-
-                <div>
-                  <p className="text-gray-600 mb-6 leading-relaxed text-justify">
-                    Em um passeio inesquecível a Domingos Martins, nossa jornada
-                    ganhou um novo e belo significado. Desfrutamos da colheita
-                    de morangos e nos perdemos na beleza do lavandário, com seus
-                    campos roxos e perfume adocicado. Foi debaixo de uma árvore,
-                    com a natureza como nossa testemunha, que fiz a pergunta que
-                    mudaria nossas vidas para sempre.
-                  </p>
-
-                  <p className="text-gray-600 mb-6 leading-relaxed text-justify">
-                    O 'sim' dela fez daquele momento a memória mais linda que
-                    levaremos para sempre. Agora, com o coração cheio de
-                    alegria, compartilhamos o nosso noivado e em breve
-                    celebraremos essa jornada!
-                  </p>
+              {/* Photo grid */}
+              <div ref={gridRef} className="reveal reveal-up px-8 md:px-12">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+                  <div className="img-zoom rounded-2xl overflow-hidden shadow-sm aspect-[3/4]">
+                    <img
+                      src={Lavandario}
+                      alt="Lavandário"
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                  </div>
+                  <div className="img-zoom rounded-2xl overflow-hidden shadow-sm aspect-[3/4]">
+                    <img
+                      src={BancoLavandario}
+                      alt="Banco no lavandário"
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                  </div>
+                  <div className="img-zoom rounded-2xl overflow-hidden shadow-sm aspect-[3/4]">
+                    <img
+                      src={ColheitaMorangos}
+                      alt="Colheita de morangos"
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                  </div>
                 </div>
               </div>
 
-              <div className="text-center mt-10">
-                <p className="text-xl md:text-2xl font-serif text-sky-700">
-                  {initialWeddingDetails.coupleName}
-                </p>
-                <p className="text-gray-500">{initialWeddingDetails.date}</p>
+              {/* Second text block with photo */}
+              <div ref={para2Ref} className="reveal reveal-up p-8 md:p-12">
+                <div className="flex flex-col sm:flex-row-reverse gap-6 items-start">
+                  <div className="img-zoom flex-shrink-0 w-full sm:w-64 rounded-2xl overflow-hidden shadow-md aspect-[4/3]">
+                    <img
+                      src={Coracao}
+                      alt="Momentos do casal"
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                  </div>
+
+                  <div className="flex-1">
+                    <p className="text-neutral-600 leading-relaxed text-base md:text-lg mb-4">
+                      Em um passeio inesquecível a Domingos Martins, nossa
+                      jornada ganhou um novo e belo significado. Desfrutamos da
+                      colheita de morangos e nos perdemos na beleza do
+                      lavandário, com seus campos roxos e perfume adocicado. Foi
+                      debaixo de uma árvore, com a natureza como nossa
+                      testemunha, que fiz a pergunta que mudaria nossas vidas
+                      para sempre.
+                    </p>
+
+                    <p className="text-neutral-600 leading-relaxed">
+                      O "sim" dela fez daquele momento a memória mais linda que
+                      levaremos para sempre. Agora, com o coração cheio de
+                      alegria, compartilhamos o nosso noivado e em breve
+                      celebraremos essa jornada!
+                    </p>
+                  </div>
+                </div>
+
+                {/* Closing signature */}
+                <div className="text-center mt-10 pt-8 border-t border-neutral-100">
+                  <p className="font-script text-3xl text-primary-600">
+                    {initialWeddingDetails.coupleName}
+                  </p>
+                  <p className="text-neutral-400 text-sm mt-1">
+                    {initialWeddingDetails.date}
+                  </p>
+                </div>
               </div>
             </div>
           </div>
