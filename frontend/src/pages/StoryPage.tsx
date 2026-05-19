@@ -2,11 +2,11 @@ import { Helmet } from "react-helmet-async";
 
 import Layout from "../components/layout/Layout";
 
-import BancoLavandario from "../assets/img/DSC06800.jpg";
-import ColheitaMorangos from "../assets/img/colheita-morangos.jpeg";
-import Coracao from "../assets/img/coracao.jpeg";
-import Lavandario from "../assets/img/lavandario.jpeg";
-import Photo from "../assets/img/photo.jpeg";
+import Colheita001 from "../assets/img/COL05679.jpeg";
+import Colheita002 from "../assets/img/COL05746.jpeg";
+import PreWedding001 from "../assets/img/DSC06766.jpg";
+import PreWedding002 from "../assets/img/DSC06879.jpg";
+import Photo001 from "../assets/img/PHO05377.jpeg";
 
 import { initialWeddingDetails } from "../config/geral";
 import { useScrollAnimation } from "../hooks/useScrollAnimation";
@@ -49,9 +49,9 @@ export default function StoryPage() {
               {/* First text block with photo */}
               <div ref={para1Ref} className="reveal reveal-up p-8 md:p-12">
                 <div className="flex flex-col sm:flex-row gap-6 items-start">
-                  <div className="img-zoom flex-shrink-0 w-full sm:w-64 rounded-2xl overflow-hidden shadow-md aspect-[4/3]">
+                  <div className="img-zoom flex-shrink-0 w-full sm:w-64 rounded-2xl overflow-hidden shadow-md aspect-[9/16]">
                     <img
-                      src={Photo}
+                      src={PreWedding001}
                       alt="Casal apaixonado"
                       className="w-full h-full object-cover"
                     />
@@ -75,15 +75,7 @@ export default function StoryPage() {
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
                   <div className="img-zoom rounded-2xl overflow-hidden shadow-sm aspect-[3/4]">
                     <img
-                      src={Lavandario}
-                      alt="Lavandário"
-                      className="w-full h-full object-cover"
-                      loading="lazy"
-                    />
-                  </div>
-                  <div className="img-zoom rounded-2xl overflow-hidden shadow-sm aspect-[3/4]">
-                    <img
-                      src={BancoLavandario}
+                      src={Photo001}
                       alt="Banco no lavandário"
                       className="w-full h-full object-cover"
                       loading="lazy"
@@ -91,7 +83,15 @@ export default function StoryPage() {
                   </div>
                   <div className="img-zoom rounded-2xl overflow-hidden shadow-sm aspect-[3/4]">
                     <img
-                      src={ColheitaMorangos}
+                      src={PreWedding002}
+                      alt="Lavandário"
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                  </div>
+                  <div className="img-zoom rounded-2xl overflow-hidden shadow-sm aspect-[3/4]">
+                    <img
+                      src={Colheita001}
                       alt="Colheita de morangos"
                       className="w-full h-full object-cover"
                       loading="lazy"
@@ -103,9 +103,9 @@ export default function StoryPage() {
               {/* Second text block with photo */}
               <div ref={para2Ref} className="reveal reveal-up p-8 md:p-12">
                 <div className="flex flex-col sm:flex-row-reverse gap-6 items-start">
-                  <div className="img-zoom flex-shrink-0 w-full sm:w-64 rounded-2xl overflow-hidden shadow-md aspect-[4/3]">
+                  <div className="img-zoom flex-shrink-0 w-full sm:w-64 rounded-2xl overflow-hidden shadow-md aspect-[9/14]">
                     <img
-                      src={Coracao}
+                      src={Colheita002}
                       alt="Momentos do casal"
                       className="w-full h-full object-cover"
                       loading="lazy"

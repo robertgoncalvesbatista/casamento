@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 
-import BancoLavandario from "../../assets/img/DSC06834.jpg";
-import Lavandario from "../../assets/img/DSC06876.jpg";
-import Coracao from "../../assets/img/DSC06937.jpg";
-import Photo from "../../assets/img/photo.jpeg";
+import PreWedding001 from "../../assets/img/DSC06800.jpg";
+import PreWedding002 from "../../assets/img/DSC06834.jpg";
+import PreWedding003 from "../../assets/img/DSC06876.jpg";
+import Photo001 from "../../assets/img/PHO05377.jpeg";
 
 import { initialWeddingDetails } from "../../config/geral";
 import { useScrollAnimation } from "../../hooks/useScrollAnimation";
@@ -55,8 +55,8 @@ export default function OurStory() {
               <div className="grid grid-cols-2 gap-3">
                 <div className="img-zoom col-span-2 rounded-2xl overflow-hidden shadow-md aspect-[16/9]">
                   <img
-                    src={BancoLavandario}
-                    alt="Casal no lavandário"
+                    src={PreWedding002}
+                    alt="Pre-wedding dos noivos"
                     className="w-full h-full object-cover"
                     loading="lazy"
                   />
@@ -64,8 +64,8 @@ export default function OurStory() {
 
                 <div className="img-zoom rounded-2xl overflow-hidden shadow-md aspect-square">
                   <img
-                    src={Coracao}
-                    alt="Momento romântico do casal"
+                    src={PreWedding003}
+                    alt="Pre-wedding dos noivos"
                     className="w-full h-full object-cover"
                     loading="lazy"
                   />
@@ -73,8 +73,8 @@ export default function OurStory() {
 
                 <div className="img-zoom rounded-2xl overflow-hidden shadow-md aspect-square">
                   <img
-                    src={Photo}
-                    alt="Casal apaixonado"
+                    src={Photo001}
+                    alt="Namorados"
                     className="w-full h-full object-cover"
                     loading="lazy"
                   />
@@ -82,8 +82,8 @@ export default function OurStory() {
 
                 <div className="img-zoom col-span-2 rounded-2xl overflow-hidden shadow-md aspect-[16/9]">
                   <img
-                    src={Lavandario}
-                    alt="Casal entre as lavandas"
+                    src={PreWedding001}
+                    alt="Pre-wedding dos noivos"
                     className="w-full h-full object-cover"
                     loading="lazy"
                   />
