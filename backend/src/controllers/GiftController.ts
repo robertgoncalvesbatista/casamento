@@ -75,7 +75,7 @@ class GiftController {
 
       res.status(200).json({
         statusCode: 200,
-        data: { message: "Deletado com sucesso!" },
+        message: "Deletado com sucesso!",
       });
     } catch (error: any) {
       res.status(400).json({ statusCode: 400, message: error.message });
