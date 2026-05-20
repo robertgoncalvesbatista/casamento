@@ -33,6 +33,7 @@ export default function GiftList() {
   const modalReservarPresenteRef = useRef<ModalRef>(null);
 
   const [alert, setAlert] = useState<TAlert>();
+  const [modalAlert, setModalAlert] = useState<TAlert>();
   const [selectedGift, setSelectedGift] = useState<number>();
 
   const {
@@ -80,13 +81,21 @@ export default function GiftList() {
       modalReservarPresenteRef.current?.close();
     } catch (error) {
       const err = error as any;
-      setAlert({
-        type: "error",
-        message:
-          err.response?.data?.message ||
-          err.message ||
-          "Ocorreu um erro ao reservar o presente.",
-      });
+      const message =
+        err.response?.data?.message ||
+        err.message ||
+        "Ocorreu um erro ao reservar o presente.";
+
+      setModalAlert({ type: "error", message });
+
+      // Se o presente já foi reservado por outra pessoa, atualiza o estado local
+      if (err.response?.data?.message === "Este presente já foi reservado") {
+        setGifts((prev) =>
+          prev.map((gift) =>
+            Number(gift.id) === selectedGift ? { ...gift, reserved: true } : gift
+          )
+        );
+      }
     } finally {
       reset({});
     }
@@ -100,6 +109,16 @@ export default function GiftList() {
 
   return (
     <div>
+      {!!alert && (
+        <div className="mb-6">
+          <Alert
+            message={alert.message}
+            type={alert.type}
+            onClose={() => setAlert(undefined)}
+          />
+        </div>
+      )}
+
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {!!giftsIsLoading && (
           <div className="col-span-3 flex justify-center items-center py-12">
@@ -160,6 +179,7 @@ export default function GiftList() {
                       }
                       onClick={() => {
                         setSelectedGift(Number(gift.id));
+                        setModalAlert(undefined);
                         modalReservarPresenteRef.current?.open();
                       }}
                     >
@@ -183,11 +203,11 @@ export default function GiftList() {
       {/* Modal para reservar presente */}
       <Modal ref={modalReservarPresenteRef}>
         <>
-          {!!alert && (
+          {!!modalAlert && (
             <Alert
-              message={alert.message}
-              type={alert.type}
-              onClose={() => setAlert(undefined)}
+              message={modalAlert.message}
+              type={modalAlert.type}
+              onClose={() => setModalAlert(undefined)}
             />
           )}
 
@@ -218,6 +238,7 @@ export default function GiftList() {
                 onClick={() => {
                   modalReservarPresenteRef.current?.close();
                   setSelectedGift(undefined);
+                  setModalAlert(undefined);
                 }}
               >
                 Cancelar
