@@ -22,7 +22,9 @@ class GuestService {
       throw new Error("O convidado já confirmou sua presença.");
     }
 
-    return await prisma.guest.create({ data });
+    return await prisma.guest.create({
+      data: { name: data.name, confirmed: true },
+    });
   }
 
   async read(where: GuestWhereUniqueInput) {
