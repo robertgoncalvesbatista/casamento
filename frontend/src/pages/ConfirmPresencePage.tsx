@@ -1,8 +1,8 @@
+import { CalendarHeart } from "lucide-react";
 import { useEffect, useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { Helmet } from "react-helmet-async";
-import { CalendarHeart } from "lucide-react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -38,21 +38,21 @@ export default function ConfirmPresencePage() {
 
   const onSubmit = async (data: ReserveGiftValidator) => {
     try {
-      const responseGuest = await GuestService.index({
-        params: { name: data.nome },
+      const responseGuest = await GuestService.create({
+        name: data.nome,
       });
 
-      if (responseGuest.data.length === 0) {
+      if (!responseGuest.data) {
         throw new Error(
           "Esta pessoa não foi convidada ou o nome informado está incorreto.",
         );
       }
 
-      if (responseGuest.data[0].confirmed) {
+      if (responseGuest.data.confirmed) {
         throw new Error("O convidado já confirmou sua presença.");
       }
 
-      await GuestService.update(responseGuest.data[0].id, { confirmed: true });
+      await GuestService.update(responseGuest.data.id, { confirmed: true });
 
       setAlert({
         type: "success",

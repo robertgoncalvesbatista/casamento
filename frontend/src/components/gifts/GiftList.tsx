@@ -19,8 +19,8 @@ import Alert from "../ui/Alerts/Alert";
 import Button from "../ui/Button";
 import Card from "../ui/Card";
 import Input from "../ui/Input";
-import Modal, { ModalRef } from "../ui/Modal";
 import LoadingSpinner from "../ui/LoadingSpinner";
+import Modal, { ModalRef } from "../ui/Modal";
 
 type TAlert = {
   type: "error" | "success" | "warning";
@@ -50,20 +50,20 @@ export default function GiftList() {
         throw new Error("Selecione um presente");
       }
 
-      const responseGuest = await GuestService.index({
-        params: { name: data.nome?.trim() },
+      const responseGuest = await GuestService.create({
+        name: data.nome?.trim(),
       });
 
-      if (responseGuest.data.length === 0) {
+      if (!responseGuest.data) {
         throw new Error(
           "Esta pessoa não foi convidada ou o nome informado está incorreto.",
         );
+      } else if (responseGuest.data.confirmed) {
+        throw new Error("O convidado já confirmou sua presença.");
       } else {
-        const { id } = responseGuest.data[0];
+        const { id } = responseGuest.data;
 
-        await GuestService.update(id, {
-          giftId: selectedGift,
-        });
+        await GuestService.update(id, { giftId: selectedGift });
 
         await GiftService.update(selectedGift, {
           reserved: true,
@@ -187,7 +187,13 @@ export default function GiftList() {
       {/* Modal para reservar presente */}
       <Modal ref={modalReservarPresenteRef}>
         <>
-          {!!alert && <Alert message={alert.message} type={alert.type} onClose={() => setAlert(undefined)} />}
+          {!!alert && (
+            <Alert
+              message={alert.message}
+              type={alert.type}
+              onClose={() => setAlert(undefined)}
+            />
+          )}
 
           <h3 className="text-xl font-semibold text-gray-800 mb-4">
             Reservar presente
