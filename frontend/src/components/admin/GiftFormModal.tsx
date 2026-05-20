@@ -1,56 +1,66 @@
+import { forwardRef, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import { Gift } from "../../services/GiftService";
+import {
+  GiftFormValidation,
+  GiftFormValidator,
+} from "../../validators/GiftForm";
 import Button from "../ui/Button";
 import Input from "../ui/Input";
 import Modal, { ModalRef } from "../ui/Modal";
-import { GiftFormValidation, GiftFormValidator } from "../../validators/GiftForm";
-import { Gift } from "../../services/GiftService";
 
 interface GiftFormModalProps {
-  ref: React.RefObject<ModalRef>;
   onSubmit: (data: GiftFormValidator) => Promise<void>;
   isLoading?: boolean;
   initialData?: Gift;
 }
 
-export const GiftFormModal = React.forwardRef<ModalRef, GiftFormModalProps>(
-  ({ onSubmit: onFormSubmit, isLoading = false, initialData }, ref) => {
+const GiftFormModal = forwardRef<ModalRef, GiftFormModalProps>(
+  (
+    { onSubmit: onFormSubmit, isLoading = false, initialData },
+    ref
+  ) => {
     const {
       register,
       handleSubmit,
       formState: { errors },
       reset,
+      setValue,
     } = useForm<GiftFormValidator>({
       resolver: zodResolver(GiftFormValidation),
-      defaultValues: initialData
-        ? {
-            name: initialData.name,
-            description: initialData.description,
-            price: Number(initialData.price),
-            image: initialData.image,
-            link: initialData.link,
-          }
-        : undefined,
     });
+
+    useEffect(() => {
+      if (initialData) {
+        setValue("name", initialData.name);
+        setValue("description", initialData.description);
+        setValue("price", Number(initialData.price) as any);
+        setValue("image", initialData.image);
+        setValue("link", initialData.link);
+      } else {
+        reset();
+      }
+    }, [initialData, reset, setValue]);
 
     const onSubmit = async (data: GiftFormValidator) => {
       try {
         await onFormSubmit(data);
         reset();
-        ref?.current?.close();
-      } catch (error) {
+        (ref as any)?.current?.close();
+      } catch {
         // Erro é tratado pelo componente pai
       }
     };
 
     return (
-      <Modal ref={ref}>
+      <Modal ref={ref as any}>
         <h3 className="text-xl font-semibold text-gray-800 mb-4">
           {initialData ? "Editar presente" : "Novo presente"}
         </h3>
 
-        <form onSubmit={handleSubmit(onSubmit)} noValidate>
+        <form onSubmit={handleSubmit(onSubmit as any)} noValidate>
           <div className="mb-2">
             <Input
               fullWidth
@@ -127,7 +137,7 @@ export const GiftFormModal = React.forwardRef<ModalRef, GiftFormModalProps>(
           <div className="flex justify-end gap-2">
             <Button
               variant="outline"
-              onClick={() => ref?.current?.close()}
+              onClick={() => (ref as any)?.current?.close()}
               disabled={isLoading}
             >
               Cancelar
@@ -143,7 +153,5 @@ export const GiftFormModal = React.forwardRef<ModalRef, GiftFormModalProps>(
 );
 
 GiftFormModal.displayName = "GiftFormModal";
-
-import React from "react";
 
 export default GiftFormModal;
