@@ -18,11 +18,15 @@ class GuestService {
   }
 
   async create(data: GuestCreateInput) {
-    try {
-      return await prisma.guest.create({ data });
-    } catch (error) {
-      console.log(error);
+    const found = await prisma.guest.findFirst({
+      where: { name: data.name },
+    });
+
+    if (found) {
+      throw new Error("O convidado já confirmou sua presença.");
     }
+
+    return await prisma.guest.create({ data });
   }
 
   async read(where: GuestWhereUniqueInput) {

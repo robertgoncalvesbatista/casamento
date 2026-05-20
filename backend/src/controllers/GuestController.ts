@@ -20,10 +20,14 @@ class GuestController {
     res: GuestResponse<Guest | null>,
     _next: NextFunction,
   ) {
-    const where = { id: Number(req.params.id) };
-    const data = await guestService.read(where);
+    try {
+      const where = { id: Number(req.params.id) };
+      const data = await guestService.read(where);
 
-    res.status(200).json({ statusCode: 200, data: data ?? null });
+      res.status(200).json({ statusCode: 200, data: data ?? null });
+    } catch (error: any) {
+      res.status(400).json({ statusCode: 400, data: error.message });
+    }
   }
 
   async create(
@@ -31,9 +35,13 @@ class GuestController {
     res: GuestResponse<Guest | null>,
     _next: NextFunction,
   ) {
-    const data = await guestService.create(req.body);
+    try {
+      const data = await guestService.create(req.body);
 
-    res.status(200).json({ statusCode: 200, data: data ?? null });
+      res.status(200).json({ statusCode: 200, data: data ?? null });
+    } catch (error: any) {
+      res.status(400).json({ statusCode: 400, data: error.message });
+    }
   }
 
   async update(
