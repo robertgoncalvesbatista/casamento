@@ -12,6 +12,7 @@ import ConfirmPresencePage from "./pages/ConfirmPresencePage";
 import NotFoundPage from "./pages/NotFoundPage";
 import LoginPage from "./pages/admin/LoginPage";
 import GiftsCrudPage from "./pages/admin/GiftsCrudPage";
+import GuestsPage from "./pages/admin/GuestsPage";
 
 export default function App() {
   return (
@@ -32,6 +33,14 @@ export default function App() {
                 element={
                   <ProtectedRoute>
                     <GiftsCrudPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/convidados"
+                element={
+                  <ProtectedRoute>
+                    <GuestsPage />
                   </ProtectedRoute>
                 }
               />
