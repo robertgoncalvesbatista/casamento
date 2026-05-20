@@ -36,7 +36,7 @@ const GiftFormModal = forwardRef<ModalRef, GiftFormModalProps>(
       if (initialData) {
         setValue("name", initialData.name);
         setValue("description", initialData.description);
-        setValue("price", Number(initialData.price) as any);
+        setValue("price", Number(initialData.price));
         setValue("image", initialData.image);
         setValue("link", initialData.link);
       } else {
