@@ -5,62 +5,81 @@ import GiftService from "../services/GiftService.ts";
 
 type GiftResponse<T = any> = Response<{
   statusCode: number;
-  data: T;
+  data?: T;
+  message?: string;
 }>;
 
 class GiftController {
   async index(_req: Request, res: GiftResponse<Gift[]>, _next: NextFunction) {
-    const data = await GiftService.index();
+    try {
+      const data = await GiftService.index();
 
-    res.status(200).json({ statusCode: 200, data: data ?? [] });
+      res.status(200).json({ statusCode: 200, data: data ?? [] });
+    } catch (error: any) {
+      res.status(400).json({ statusCode: 400, message: error.message });
+    }
   }
 
   async read(
     req: Request,
     res: GiftResponse<Gift | null>,
-    _next: NextFunction
+    _next: NextFunction,
   ) {
-    const where = { id: Number(req.params.id) };
-    const data = await GiftService.read(where);
+    try {
+      const where = { id: Number(req.params.id) };
+      const data = await GiftService.read(where);
 
-    res.status(200).json({ statusCode: 200, data: data ?? null });
+      res.status(200).json({ statusCode: 200, data: data ?? null });
+    } catch (error: any) {
+      res.status(400).json({ statusCode: 400, message: error.message });
+    }
   }
 
   async create(
     req: Request,
     res: GiftResponse<Gift | null>,
-    _next: NextFunction
+    _next: NextFunction,
   ) {
-    const data = await GiftService.create(req.body);
+    try {
+      const data = await GiftService.create(req.body);
 
-    res.status(200).json({ statusCode: 200, data: data ?? null });
+      res.status(200).json({ statusCode: 200, data: data ?? null });
+    } catch (error: any) {
+      res.status(400).json({ statusCode: 400, message: error.message });
+    }
   }
 
   async update(
     req: Request,
     res: GiftResponse<Gift | null>,
-    _next: NextFunction
+    _next: NextFunction,
   ) {
-    const where = { id: Number(req.params.id) };
-    const data = await GiftService.update(req.body, where);
+    try {
+      const where = { id: Number(req.params.id) };
+      const data = await GiftService.update(req.body, where);
 
-    res.status(200).json({ statusCode: 200, data: data ?? null });
+      res.status(200).json({ statusCode: 200, data: data ?? null });
+    } catch (error: any) {
+      res.status(400).json({ statusCode: 400, message: error.message });
+    }
   }
 
   async delete(
     req: Request,
     res: GiftResponse<{ message: string }>,
-    _next: NextFunction
+    _next: NextFunction,
   ) {
-    const where = { id: Number(req.params.id) };
-    await GiftService.delete(where);
+    try {
+      const where = { id: Number(req.params.id) };
+      await GiftService.delete(where);
 
-    res.status(200).json({
-      statusCode: 200,
-      data: {
-        message: "Deletado com sucesso!",
-      },
-    });
+      res.status(200).json({
+        statusCode: 200,
+        data: { message: "Deletado com sucesso!" },
+      });
+    } catch (error: any) {
+      res.status(400).json({ statusCode: 400, message: error.message });
+    }
   }
 }
 

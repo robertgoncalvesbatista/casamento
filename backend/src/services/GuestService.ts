@@ -10,11 +10,7 @@ import { prisma } from "../config/config.ts";
 
 class GuestService {
   async index() {
-    try {
-      return await prisma.guest.findMany();
-    } catch (error) {
-      console.log(error);
-    }
+    return await prisma.guest.findMany();
   }
 
   async create(data: GuestCreateInput) {
@@ -30,27 +26,15 @@ class GuestService {
   }
 
   async read(where: GuestWhereUniqueInput) {
-    try {
-      return await prisma.guest.findUnique({ where });
-    } catch (error) {
-      console.log(error);
-    }
+    return await prisma.guest.findUnique({ where });
   }
 
   async update(data: GuestUpdateInput, where: GuestWhereUniqueInput) {
-    try {
-      return await prisma.guest.update({ data, where });
-    } catch (error) {
-      console.log(error);
-    }
+    return await prisma.guest.update({ data, where });
   }
 
   async delete(where: GuestWhereUniqueInput) {
-    try {
-      return await prisma.guest.delete({ where });
-    } catch (error) {
-      console.log(error);
-    }
+    return await prisma.guest.delete({ where });
   }
 }
 

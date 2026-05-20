@@ -5,14 +5,19 @@ import guestService from "../services/GuestService.ts";
 
 type GuestResponse<T = any> = Response<{
   statusCode: number;
-  data: T;
+  data?: T;
+  message?: string;
 }>;
 
 class GuestController {
   async index(_req: Request, res: GuestResponse<Guest[]>, _next: NextFunction) {
-    const data = await guestService.index();
+    try {
+      const data = await guestService.index();
 
-    res.status(200).json({ statusCode: 200, data: data ?? [] });
+      res.status(200).json({ statusCode: 200, data: data ?? [] });
+    } catch (error: any) {
+      res.status(400).json({ statusCode: 400, message: error.message });
+    }
   }
 
   async read(
@@ -26,7 +31,7 @@ class GuestController {
 
       res.status(200).json({ statusCode: 200, data: data ?? null });
     } catch (error: any) {
-      res.status(400).json({ statusCode: 400, data: error.message });
+      res.status(400).json({ statusCode: 400, message: error.message });
     }
   }
 
@@ -49,10 +54,14 @@ class GuestController {
     res: GuestResponse<Guest | null>,
     _next: NextFunction,
   ) {
-    const where = { id: Number(req.params.id) };
-    const data = await guestService.update(req.body, where);
+    try {
+      const where = { id: Number(req.params.id) };
+      const data = await guestService.update(req.body, where);
 
-    res.status(200).json({ statusCode: 200, data: data ?? null });
+      res.status(200).json({ statusCode: 200, data: data ?? null });
+    } catch (error: any) {
+      res.status(400).json({ statusCode: 400, message: error.message });
+    }
   }
 
   async delete(
@@ -60,15 +69,19 @@ class GuestController {
     res: GuestResponse<{ message: string }>,
     _next: NextFunction,
   ) {
-    const where = { id: Number(req.params.id) };
-    await guestService.delete(where);
+    try {
+      const where = { id: Number(req.params.id) };
+      await guestService.delete(where);
 
-    res.status(200).json({
-      statusCode: 200,
-      data: {
-        message: "Deletado com sucesso!",
-      },
-    });
+      res.status(200).json({
+        statusCode: 200,
+        data: {
+          message: "Deletado com sucesso!",
+        },
+      });
+    } catch (error: any) {
+      res.status(400).json({ statusCode: 400, message: error.message });
+    }
   }
 }
 
