@@ -7,8 +7,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useWedding } from "../../context/Wedding/wedding.hook";
 
-import Loading from "../../assets/img/c7e1b7b5753737039e1bdbda578132b8.gif";
-
 import {
   ReserveGiftValidation,
   ReserveGiftValidator,
@@ -22,6 +20,7 @@ import Button from "../ui/Button";
 import Card from "../ui/Card";
 import Input from "../ui/Input";
 import Modal, { ModalRef } from "../ui/Modal";
+import LoadingSpinner from "../ui/LoadingSpinner";
 
 type TAlert = {
   type: "error" | "success" | "warning";
@@ -66,7 +65,7 @@ export default function GiftList() {
           giftId: selectedGift,
         });
 
-        await GiftService.update(id, {
+        await GiftService.update(selectedGift, {
           reserved: true,
         });
 
@@ -107,12 +106,8 @@ export default function GiftList() {
     <div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {!!giftsIsLoading && (
-          <div className="col-span-3 flex justify-center items-center">
-            <img
-              src={Loading}
-              alt="Carregando lista de presentes..."
-              style={{ mixBlendMode: "multiply" }}
-            />
+          <div className="col-span-3 flex justify-center items-center py-12">
+            <LoadingSpinner />
           </div>
         )}
 
