@@ -38,25 +38,19 @@ export default function ConfirmPresencePage() {
 
   const onSubmit = async (data: ReserveGiftValidator) => {
     try {
-      const responseGuest = await GuestService.index({
-        params: { name: data.nome },
-      });
-
-      if (responseGuest.data.length > 0 && responseGuest.data[0].confirmed) {
-        throw new Error("O convidado já confirmou sua presença");
-      }
-
       await GuestService.create({ name: data.nome });
 
       setAlert({
         type: "success",
         message: "Sua presença foi confirmada com sucesso!",
       });
-    } catch (error: any) {
+    } catch (error) {
+      const err = error as any;
       setAlert({
         type: "error",
         message:
-          error.response.data.message ||
+          err.response?.data?.message ||
+          err.message ||
           "Ocorreu um erro ao confirmar presença.",
       });
     }

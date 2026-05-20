@@ -10,7 +10,7 @@ type GuestResponse<T = any> = Response<{
 }>;
 
 class GuestController {
-  async index(_req: Request, res: GuestResponse<Guest[]>, _next: NextFunction) {
+  async index(req: Request, res: GuestResponse<Guest[]>, _next: NextFunction) {
     try {
       const data = await guestService.index();
 
