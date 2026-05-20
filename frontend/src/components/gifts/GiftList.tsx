@@ -19,8 +19,8 @@ import Alert from "../ui/Alerts/Alert";
 import Button from "../ui/Button";
 import Card from "../ui/Card";
 import Input from "../ui/Input";
-import Modal, { ModalRef } from "../ui/Modal";
 import LoadingSpinner from "../ui/LoadingSpinner";
+import Modal, { ModalRef } from "../ui/Modal";
 
 type TAlert = {
   type: "error" | "success" | "warning";
@@ -89,7 +89,9 @@ export default function GiftList() {
     } catch (error: any) {
       setAlert({
         type: "error",
-        message: error.message || "Ocorreu um erro ao reservar o presente.",
+        message:
+          error.response.data.message ||
+          "Ocorreu um erro ao reservar o presente.",
       });
     } finally {
       reset({});

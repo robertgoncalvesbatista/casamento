@@ -1,5 +1,6 @@
 import { forwardRef, useEffect } from "react";
 import { useForm } from "react-hook-form";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Gift } from "../../services/GiftService";
@@ -7,6 +8,7 @@ import {
   GiftFormValidation,
   GiftFormValidator,
 } from "../../validators/GiftForm";
+
 import Button from "../ui/Button";
 import Input from "../ui/Input";
 import Modal, { ModalRef } from "../ui/Modal";
@@ -18,10 +20,7 @@ interface GiftFormModalProps {
 }
 
 const GiftFormModal = forwardRef<ModalRef, GiftFormModalProps>(
-  (
-    { onSubmit: onFormSubmit, isLoading = false, initialData },
-    ref
-  ) => {
+  ({ onSubmit: onFormSubmit, isLoading = false, initialData }, ref) => {
     const {
       register,
       handleSubmit,
@@ -55,12 +54,12 @@ const GiftFormModal = forwardRef<ModalRef, GiftFormModalProps>(
     };
 
     return (
-      <Modal ref={ref as any}>
+      <Modal ref={ref}>
         <h3 className="text-xl font-semibold text-gray-800 mb-4">
           {initialData ? "Editar presente" : "Novo presente"}
         </h3>
 
-        <form onSubmit={handleSubmit(onSubmit as any)} noValidate>
+        <form onSubmit={handleSubmit(onSubmit)} noValidate>
           <div className="mb-2">
             <Input
               fullWidth
@@ -149,7 +148,7 @@ const GiftFormModal = forwardRef<ModalRef, GiftFormModalProps>(
         </form>
       </Modal>
     );
-  }
+  },
 );
 
 GiftFormModal.displayName = "GiftFormModal";

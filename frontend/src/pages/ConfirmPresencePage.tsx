@@ -55,7 +55,9 @@ export default function ConfirmPresencePage() {
     } catch (error: any) {
       setAlert({
         type: "error",
-        message: error.message || "Ocorreu um erro ao confirmar presença.",
+        message:
+          error.response.data.message ||
+          "Ocorreu um erro ao confirmar presença.",
       });
     }
   };
