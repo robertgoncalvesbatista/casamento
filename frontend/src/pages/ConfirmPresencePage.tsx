@@ -38,21 +38,15 @@ export default function ConfirmPresencePage() {
 
   const onSubmit = async (data: ReserveGiftValidator) => {
     try {
-      const responseGuest = await GuestService.create({
-        name: data.nome,
+      const responseGuest = await GuestService.index({
+        params: { name: data.nome },
       });
 
-      if (!responseGuest.data) {
-        throw new Error(
-          "Esta pessoa não foi convidada ou o nome informado está incorreto.",
-        );
+      if (responseGuest.data.length > 0 && responseGuest.data[0].confirmed) {
+        throw new Error("O convidado já confirmou sua presença");
       }
 
-      if (responseGuest.data.confirmed) {
-        throw new Error("O convidado já confirmou sua presença.");
-      }
-
-      await GuestService.update(responseGuest.data.id, { confirmed: true });
+      await GuestService.create({ name: data.nome });
 
       setAlert({
         type: "success",
