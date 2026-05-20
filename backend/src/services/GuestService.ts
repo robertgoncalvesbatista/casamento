@@ -9,7 +9,10 @@ import type {
 import { prisma } from "../config/config.ts";
 
 class GuestService {
-  async index() {
+  async index(name?: string) {
+    if (name) {
+      return await prisma.guest.findMany({ where: { name } });
+    }
     return await prisma.guest.findMany();
   }
 

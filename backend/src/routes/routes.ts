@@ -13,6 +13,7 @@ router.post("/admin/login", AdminController.login);
 // Gift routes
 router.get("/gift", GiftController.index);
 router.get("/gift/:id", GiftController.read);
+router.patch("/gift/:id/reserve", GiftController.reserve);
 router.post("/gift", authMiddleware, GiftController.create);
 router.put("/gift/:id", authMiddleware, GiftController.update);
 router.delete("/gift/:id", authMiddleware, GiftController.delete);

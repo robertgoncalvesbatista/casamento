@@ -64,6 +64,21 @@ class GiftController {
     }
   }
 
+  async reserve(
+    req: Request,
+    res: GiftResponse<Gift | null>,
+    _next: NextFunction,
+  ) {
+    try {
+      const id = Number(req.params.id);
+      const data = await GiftService.reserve(id);
+
+      res.status(200).json({ statusCode: 200, data: data ?? null });
+    } catch (error: any) {
+      res.status(400).json({ statusCode: 400, message: error.message });
+    }
+  }
+
   async delete(
     req: Request,
     res: GiftResponse<{ message: string }>,

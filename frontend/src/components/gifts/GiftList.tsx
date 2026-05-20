@@ -46,51 +46,45 @@ export default function GiftList() {
 
   const onSubmit = async (data: ReserveGiftValidator) => {
     try {
-      if (!selectedGift) {
-        throw new Error("Selecione um presente");
-      }
+      if (!selectedGift) return;
 
-      const responseGuest = await GuestService.index({
-        params: { name: data.nome?.trim() },
-      });
+      const name = data.nome.trim();
 
-      if (responseGuest.data.length === 0) {
-        throw new Error(
-          "Esta pessoa não foi convidada ou o nome informado está incorreto.",
-        );
+      // Buscar convidado pelo nome exato
+      const responseGuest = await GuestService.index({ params: { name } });
+
+      let guestId: number;
+
+      if (responseGuest.data.length > 0) {
+        // Convidado já existe — usa o id existente
+        guestId = responseGuest.data[0].id;
       } else {
-        const { id } = responseGuest.data[0];
-
-        await GuestService.update(id, {
-          giftId: selectedGift,
-        });
-
-        await GiftService.update(selectedGift, {
-          reserved: true,
-        });
-
-        setAlert({
-          type: "success",
-          message: "Presente reservado com sucesso!",
-        });
-
-        setGifts((prev) => {
-          return prev.map((gift) => {
-            if (Number(gift.id) === selectedGift) {
-              return { ...gift, reserved: true };
-            }
-
-            return gift;
-          });
-        });
+        // Não existe — confirma presença criando o convidado
+        const created = await GuestService.create({ name });
+        guestId = created.data.id;
       }
 
+      // Vincula o presente ao convidado
+      await GuestService.update(guestId, { giftId: selectedGift });
+
+      // Marca o presente como reservado (rota pública)
+      await GiftService.reserve(selectedGift);
+
+      setGifts((prev) =>
+        prev.map((gift) =>
+          Number(gift.id) === selectedGift ? { ...gift, reserved: true } : gift
+        )
+      );
+
+      setAlert({ type: "success", message: "Presente reservado com sucesso!" });
       modalReservarPresenteRef.current?.close();
-    } catch (error: any) {
+    } catch (error) {
+      const err = error as any;
       setAlert({
         type: "error",
         message:
-          error.response.data.message ||
+          err.response?.data?.message ||
+          err.message ||
           "Ocorreu um erro ao reservar o presente.",
       });
     } finally {

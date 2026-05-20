@@ -12,7 +12,8 @@ type GuestResponse<T = any> = Response<{
 class GuestController {
   async index(req: Request, res: GuestResponse<Guest[]>, _next: NextFunction) {
     try {
-      const data = await guestService.index();
+      const name = req.query.name as string | undefined;
+      const data = await guestService.index(name);
 
       res.status(200).json({ statusCode: 200, data: data ?? [] });
     } catch (error: any) {

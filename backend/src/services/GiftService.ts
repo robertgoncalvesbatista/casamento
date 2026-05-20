@@ -10,7 +10,11 @@ import { prisma } from "../config/config.ts";
 
 class GiftService {
   private validateInput(data: any): void {
-    if (!data.name || typeof data.name !== "string" || data.name.trim() === "") {
+    if (
+      !data.name ||
+      typeof data.name !== "string" ||
+      data.name.trim() === ""
+    ) {
       throw new Error("Nome é obrigatório");
     }
 
@@ -26,11 +30,19 @@ class GiftService {
       throw new Error("Preço deve ser maior que 0");
     }
 
-    if (!data.image || typeof data.image !== "string" || data.image.trim() === "") {
+    if (
+      !data.image ||
+      typeof data.image !== "string" ||
+      data.image.trim() === ""
+    ) {
       throw new Error("Imagem é obrigatória");
     }
 
-    if (!data.link || typeof data.link !== "string" || data.link.trim() === "") {
+    if (
+      !data.link ||
+      typeof data.link !== "string" ||
+      data.link.trim() === ""
+    ) {
       throw new Error("Link é obrigatório");
     }
   }
@@ -51,6 +63,23 @@ class GiftService {
   async update(data: GiftUpdateInput, where: GiftWhereUniqueInput) {
     this.validateInput(data);
     return await prisma.gift.update({ data, where });
+  }
+
+  async reserve(id: number) {
+    const gift = await prisma.gift.findUnique({ where: { id } });
+
+    if (!gift) {
+      throw new Error("Presente não encontrado");
+    }
+
+    if (gift.reserved) {
+      throw new Error("Este presente já foi reservado");
+    }
+
+    return await prisma.gift.update({
+      data: { reserved: true },
+      where: { id },
+    });
   }
 
   async delete(where: GiftWhereUniqueInput) {

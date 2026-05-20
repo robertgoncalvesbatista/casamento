@@ -41,6 +41,11 @@ class GiftService {
     return response.data;
   }
 
+  async reserve(id: string | number) {
+    const response = await api.patch<Response<Gift>>(`/gift/${id}/reserve`);
+    return response.data;
+  }
+
   async delete(id: string | number) {
     const response = await api.delete<Response<{ message: string }>>(
       `/gift/${id}`,
