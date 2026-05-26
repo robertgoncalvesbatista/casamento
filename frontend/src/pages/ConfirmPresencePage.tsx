@@ -100,8 +100,8 @@ export default function ConfirmPresencePage() {
 
               <p className="text-neutral-500 mb-6 leading-relaxed text-sm">
                 Sua presença é muito importante para nós! Por favor, informe seu
-                nome completo como consta na lista de convidados para confirmar
-                sua participação.
+                nome completo para confirmar sua participação. Não esqueça de
+                confirmar o nome dos outros convidados da sua família.
               </p>
 
               <form onSubmit={handleSubmit(onSubmit)} noValidate>
@@ -110,7 +110,7 @@ export default function ConfirmPresencePage() {
                     fullWidth
                     name="nome"
                     label="Nome completo"
-                    placeholder="Como consta na lista de convidados"
+                    placeholder="Digite seu nome completo"
                     register={register}
                     error={errors.nome?.message}
                   />

@@ -73,8 +73,8 @@ export default function GiftList() {
 
       setGifts((prev) =>
         prev.map((gift) =>
-          Number(gift.id) === selectedGift ? { ...gift, reserved: true } : gift
-        )
+          Number(gift.id) === selectedGift ? { ...gift, reserved: true } : gift,
+        ),
       );
 
       setAlert({ type: "success", message: "Presente reservado com sucesso!" });
@@ -92,8 +92,10 @@ export default function GiftList() {
       if (err.response?.data?.message === "Este presente já foi reservado") {
         setGifts((prev) =>
           prev.map((gift) =>
-            Number(gift.id) === selectedGift ? { ...gift, reserved: true } : gift
-          )
+            Number(gift.id) === selectedGift
+              ? { ...gift, reserved: true }
+              : gift,
+          ),
         );
       }
     } finally {
@@ -216,7 +218,7 @@ export default function GiftList() {
           </h3>
 
           <p className="text-gray-600 mb-4">
-            Para reservar o presente, por favor informe os seus dados abaixo.
+            Para reservar o presente, por favor informe o seu nome completo.
           </p>
 
           <form onSubmit={handleSubmit(onSubmit)} noValidate>
@@ -225,7 +227,7 @@ export default function GiftList() {
                 fullWidth
                 name="nome"
                 label="Nome completo"
-                placeholder="John Doe"
+                placeholder="Digite seu nome completo"
                 register={register}
                 error={errors.nome?.message}
               />
