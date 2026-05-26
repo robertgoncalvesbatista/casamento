@@ -48,8 +48,8 @@ export default function AdminLayout({ children, title }: AdminLayoutProps) {
       </header>
 
       <div className="flex flex-1">
-        {/* Sidebar */}
-        <aside className="w-56 bg-white border-r border-gray-200 shrink-0">
+        {/* Sidebar — desktop only */}
+        <aside className="hidden md:block w-56 bg-white border-r border-gray-200 shrink-0">
           <nav className="p-3 flex flex-col gap-1">
             {navItems.map(({ to, icon: Icon, label }) => (
               <NavLink
@@ -71,8 +71,26 @@ export default function AdminLayout({ children, title }: AdminLayoutProps) {
         </aside>
 
         {/* Main Content */}
-        <main className="flex-1 p-6 min-w-0">{children}</main>
+        <main className="flex-1 p-4 md:p-6 min-w-0 pb-24 md:pb-6">{children}</main>
       </div>
+
+      {/* Bottom nav — mobile only */}
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-40 flex">
+        {navItems.map(({ to, icon: Icon, label }) => (
+          <NavLink
+            key={to}
+            to={to}
+            className={({ isActive }) =>
+              `flex-1 flex flex-col items-center gap-1 py-3 text-xs font-medium transition-colors ${
+                isActive ? "text-primary-700" : "text-gray-500 hover:text-gray-800"
+              }`
+            }
+          >
+            <Icon className="w-5 h-5" />
+            {label}
+          </NavLink>
+        ))}
+      </nav>
     </div>
   );
 }

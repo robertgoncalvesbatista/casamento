@@ -1,3 +1,5 @@
+import type { AxiosRequestConfig } from "axios";
+
 import api from "../config/api";
 import { Response } from "../types";
 
@@ -16,12 +18,12 @@ export interface Gift {
 export type GiftInput = Record<string, string | number | boolean | null>;
 
 class GiftService {
-  async index(config?: Axios.AxiosXHRConfigBase<unknown>) {
+  async index(config?: AxiosRequestConfig) {
     const response = await api.get<Response<Gift[]>>("/gift", config);
     return response.data;
   }
 
-  async create(data: GiftInput, config?: Axios.AxiosXHRConfigBase<unknown>) {
+  async create(data: GiftInput, config?: AxiosRequestConfig) {
     const response = await api.post<Response<Gift>>("/gift", data, config);
     return response.data;
   }
@@ -31,7 +33,7 @@ class GiftService {
     return response.data;
   }
 
-  async update(id: string | number, data: GiftInput, config?: Axios.AxiosXHRConfigBase<unknown>) {
+  async update(id: string | number, data: GiftInput, config?: AxiosRequestConfig) {
     const response = await api.put<Response<Gift>>(`/gift/${id}`, data, config);
     return response.data;
   }

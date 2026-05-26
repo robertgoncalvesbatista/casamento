@@ -1,3 +1,5 @@
+import type { AxiosRequestConfig } from "axios";
+
 import api from "../config/api";
 import { Response } from "../types";
 
@@ -18,7 +20,7 @@ class AdminService {
   async login(
     email: string,
     password: string,
-    config?: Axios.AxiosXHRConfigBase<unknown> | undefined
+    config?: AxiosRequestConfig
   ) {
     const response = await api.post<Response<LoginResponse>>(
       "/admin/login",

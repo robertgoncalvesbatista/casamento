@@ -1,3 +1,5 @@
+import type { AxiosRequestConfig } from "axios";
+
 import api from "../config/api";
 import { Response } from "../types";
 
@@ -13,12 +15,12 @@ export interface Guest {
 export type GuestInput = Record<string, string | number | boolean | null>;
 
 class GuestService {
-  async index(config?: Axios.AxiosXHRConfigBase<unknown>) {
+  async index(config?: AxiosRequestConfig) {
     const response = await api.get<Response<Guest[]>>("/guest", config);
     return response.data;
   }
 
-  async create(data: GuestInput, config?: Axios.AxiosXHRConfigBase<unknown>) {
+  async create(data: GuestInput, config?: AxiosRequestConfig) {
     const response = await api.post<Response<Guest>>("/guest", data, config);
     return response.data;
   }
@@ -28,7 +30,7 @@ class GuestService {
     return response.data;
   }
 
-  async update(id: string | number, data: GuestInput, config?: Axios.AxiosXHRConfigBase<unknown>) {
+  async update(id: string | number, data: GuestInput, config?: AxiosRequestConfig) {
     const response = await api.put<Response<Guest>>(`/guest/${id}`, data, config);
     return response.data;
   }
