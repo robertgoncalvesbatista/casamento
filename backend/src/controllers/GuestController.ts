@@ -1,85 +1,52 @@
 import type { NextFunction, Request, Response } from "express";
 
-import type { Guest } from "../../generated/prisma/client.ts";
-import guestService from "../services/GuestService.ts";
-
-type GuestResponse<T = any> = Response<{
-  statusCode: number;
-  data?: T;
-  message?: string;
-}>;
+import type { ApiResponse } from "../types.ts";
+import GuestService from "../services/GuestService.ts";
 
 class GuestController {
-  async index(req: Request, res: GuestResponse<Guest[]>, _next: NextFunction) {
+  async index(req: Request, res: Response<ApiResponse>, next: NextFunction) {
     try {
       const name = req.query.name as string | undefined;
-      const data = await guestService.index(name);
-
-      res.status(200).json({ statusCode: 200, data: data ?? [] });
-    } catch (error: any) {
-      res.status(400).json({ statusCode: 400, message: error.message });
+      const data = await GuestService.index(name);
+      res.status(200).json({ statusCode: 200, data });
+    } catch (error) {
+      next(error);
     }
   }
 
-  async read(
-    req: Request,
-    res: GuestResponse<Guest | null>,
-    _next: NextFunction,
-  ) {
+  async read(req: Request, res: Response<ApiResponse>, next: NextFunction) {
     try {
-      const where = { id: Number(req.params.id) };
-      const data = await guestService.read(where);
-
+      const data = await GuestService.read({ id: Number(req.params.id) });
       res.status(200).json({ statusCode: 200, data: data ?? null });
-    } catch (error: any) {
-      res.status(400).json({ statusCode: 400, message: error.message });
+    } catch (error) {
+      next(error);
     }
   }
 
-  async create(
-    req: Request,
-    res: GuestResponse<Guest | null>,
-    _next: NextFunction,
-  ) {
+  async create(req: Request, res: Response<ApiResponse>, next: NextFunction) {
     try {
-      const data = await guestService.create(req.body);
-
-      res.status(200).json({ statusCode: 200, data: data ?? null });
-    } catch (error: any) {
-      res.status(400).json({ statusCode: 400, message: error.message });
+      const data = await GuestService.create(req.body);
+      res.status(201).json({ statusCode: 201, data });
+    } catch (error) {
+      next(error);
     }
   }
 
-  async update(
-    req: Request,
-    res: GuestResponse<Guest | null>,
-    _next: NextFunction,
-  ) {
+  async update(req: Request, res: Response<ApiResponse>, next: NextFunction) {
     try {
-      const where = { id: Number(req.params.id) };
-      const data = await guestService.update(req.body, where);
-
-      res.status(200).json({ statusCode: 200, data: data ?? null });
-    } catch (error: any) {
-      res.status(400).json({ statusCode: 400, message: error.message });
+      const data = await GuestService.update(req.body, { id: Number(req.params.id) });
+      res.status(200).json({ statusCode: 200, data });
+    } catch (error) {
+      next(error);
     }
   }
 
-  async delete(
-    req: Request,
-    res: GuestResponse<{ message: string }>,
-    _next: NextFunction,
-  ) {
+  async delete(req: Request, res: Response<ApiResponse>, next: NextFunction) {
     try {
-      const where = { id: Number(req.params.id) };
-      await guestService.delete(where);
-
-      res.status(200).json({
-        statusCode: 200,
-        message: "Deletado com sucesso!",
-      });
-    } catch (error: any) {
-      res.status(400).json({ statusCode: 400, message: error.message });
+      await GuestService.delete({ id: Number(req.params.id) });
+      res.status(200).json({ statusCode: 200, message: "Deletado com sucesso!" });
+    } catch (error) {
+      next(error);
     }
   }
 }

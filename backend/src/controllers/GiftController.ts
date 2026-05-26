@@ -1,99 +1,60 @@
 import type { NextFunction, Request, Response } from "express";
 
-import type { Gift } from "../../generated/prisma/client.ts";
+import type { ApiResponse } from "../types.ts";
 import GiftService from "../services/GiftService.ts";
 
-type GiftResponse<T = any> = Response<{
-  statusCode: number;
-  data?: T;
-  message?: string;
-}>;
-
 class GiftController {
-  async index(_req: Request, res: GiftResponse<Gift[]>, _next: NextFunction) {
+  async index(_req: Request, res: Response<ApiResponse>, next: NextFunction) {
     try {
       const data = await GiftService.index();
-
-      res.status(200).json({ statusCode: 200, data: data ?? [] });
-    } catch (error: any) {
-      res.status(400).json({ statusCode: 400, message: error.message });
+      res.status(200).json({ statusCode: 200, data });
+    } catch (error) {
+      next(error);
     }
   }
 
-  async read(
-    req: Request,
-    res: GiftResponse<Gift | null>,
-    _next: NextFunction,
-  ) {
+  async read(req: Request, res: Response<ApiResponse>, next: NextFunction) {
     try {
-      const where = { id: Number(req.params.id) };
-      const data = await GiftService.read(where);
-
+      const data = await GiftService.read({ id: Number(req.params.id) });
       res.status(200).json({ statusCode: 200, data: data ?? null });
-    } catch (error: any) {
-      res.status(400).json({ statusCode: 400, message: error.message });
+    } catch (error) {
+      next(error);
     }
   }
 
-  async create(
-    req: Request,
-    res: GiftResponse<Gift | null>,
-    _next: NextFunction,
-  ) {
+  async create(req: Request, res: Response<ApiResponse>, next: NextFunction) {
     try {
       const data = await GiftService.create(req.body);
-
-      res.status(200).json({ statusCode: 200, data: data ?? null });
-    } catch (error: any) {
-      res.status(400).json({ statusCode: 400, message: error.message });
+      res.status(201).json({ statusCode: 201, data });
+    } catch (error) {
+      next(error);
     }
   }
 
-  async update(
-    req: Request,
-    res: GiftResponse<Gift | null>,
-    _next: NextFunction,
-  ) {
+  async update(req: Request, res: Response<ApiResponse>, next: NextFunction) {
     try {
-      const where = { id: Number(req.params.id) };
-      const data = await GiftService.update(req.body, where);
-
-      res.status(200).json({ statusCode: 200, data: data ?? null });
-    } catch (error: any) {
-      res.status(400).json({ statusCode: 400, message: error.message });
+      const data = await GiftService.update(req.body, { id: Number(req.params.id) });
+      res.status(200).json({ statusCode: 200, data });
+    } catch (error) {
+      next(error);
     }
   }
 
-  async reserve(
-    req: Request,
-    res: GiftResponse<Gift | null>,
-    _next: NextFunction,
-  ) {
+  async reserve(req: Request, res: Response<ApiResponse>, next: NextFunction) {
     try {
-      const id = Number(req.params.id);
-      const data = await GiftService.reserve(id);
-
-      res.status(200).json({ statusCode: 200, data: data ?? null });
-    } catch (error: any) {
-      res.status(400).json({ statusCode: 400, message: error.message });
+      const data = await GiftService.reserve(Number(req.params.id));
+      res.status(200).json({ statusCode: 200, data });
+    } catch (error) {
+      next(error);
     }
   }
 
-  async delete(
-    req: Request,
-    res: GiftResponse<{ message: string }>,
-    _next: NextFunction,
-  ) {
+  async delete(req: Request, res: Response<ApiResponse>, next: NextFunction) {
     try {
-      const where = { id: Number(req.params.id) };
-      await GiftService.delete(where);
-
-      res.status(200).json({
-        statusCode: 200,
-        message: "Deletado com sucesso!",
-      });
-    } catch (error: any) {
-      res.status(400).json({ statusCode: 400, message: error.message });
+      await GiftService.delete({ id: Number(req.params.id) });
+      res.status(200).json({ statusCode: 200, message: "Deletado com sucesso!" });
+    } catch (error) {
+      next(error);
     }
   }
 }

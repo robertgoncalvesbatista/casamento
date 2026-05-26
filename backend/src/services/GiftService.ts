@@ -1,5 +1,3 @@
-"use server";
-
 import type {
   GiftCreateInput,
   GiftUpdateInput,
@@ -8,21 +6,21 @@ import type {
 
 import { prisma } from "../config/config.ts";
 
+interface GiftInput {
+  name?: unknown;
+  description?: unknown;
+  price?: unknown;
+  image?: unknown;
+  link?: unknown;
+}
+
 class GiftService {
-  private validateInput(data: any): void {
-    if (
-      !data.name ||
-      typeof data.name !== "string" ||
-      data.name.trim() === ""
-    ) {
+  private validateInput(data: GiftInput): void {
+    if (!data.name || typeof data.name !== "string" || data.name.trim() === "") {
       throw new Error("Nome é obrigatório");
     }
 
-    if (
-      !data.description ||
-      typeof data.description !== "string" ||
-      data.description.trim() === ""
-    ) {
+    if (!data.description || typeof data.description !== "string" || data.description.trim() === "") {
       throw new Error("Descrição é obrigatória");
     }
 
@@ -30,19 +28,11 @@ class GiftService {
       throw new Error("Preço deve ser maior que 0");
     }
 
-    if (
-      !data.image ||
-      typeof data.image !== "string" ||
-      data.image.trim() === ""
-    ) {
+    if (!data.image || typeof data.image !== "string" || data.image.trim() === "") {
       throw new Error("Imagem é obrigatória");
     }
 
-    if (
-      !data.link ||
-      typeof data.link !== "string" ||
-      data.link.trim() === ""
-    ) {
+    if (!data.link || typeof data.link !== "string" || data.link.trim() === "") {
       throw new Error("Link é obrigatório");
     }
   }
@@ -76,10 +66,7 @@ class GiftService {
       throw new Error("Este presente já foi reservado");
     }
 
-    return await prisma.gift.update({
-      data: { reserved: true },
-      where: { id },
-    });
+    return await prisma.gift.update({ data: { reserved: true }, where: { id } });
   }
 
   async delete(where: GiftWhereUniqueInput) {

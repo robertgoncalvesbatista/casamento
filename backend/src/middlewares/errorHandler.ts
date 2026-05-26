@@ -1,17 +1,14 @@
 import type { NextFunction, Request, Response } from "express";
-export interface AppError extends Error {
-  status?: number;
-}
+
+import type { ApiResponse } from "../types.ts";
+import type { HttpError } from "../types.ts";
 
 export const errorHandler = (
-  err: AppError,
-  req: Request,
-  res: Response,
-  next: NextFunction
+  err: HttpError,
+  _req: Request,
+  res: Response<ApiResponse>,
+  _next: NextFunction,
 ) => {
-  // console.error("oioioi");
-  // console.error(err);
-  res.status(err.status || 500).json({
-    message: err.message || "Internal Server Error",
-  });
+  const status = err.status || 400;
+  res.status(status).json({ statusCode: status, message: err.message || "Erro interno" });
 };

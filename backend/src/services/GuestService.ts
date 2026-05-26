@@ -1,5 +1,3 @@
-"use server";
-
 import type {
   GuestCreateInput,
   GuestUpdateInput,
@@ -17,17 +15,19 @@ class GuestService {
   }
 
   async create(data: GuestCreateInput) {
-    const found = await prisma.guest.findFirst({
-      where: { name: data.name },
-    });
+    const name = typeof data.name === "string" ? data.name.trim() : "";
+
+    if (!name) {
+      throw new Error("Nome é obrigatório");
+    }
+
+    const found = await prisma.guest.findFirst({ where: { name } });
 
     if (found) {
       throw new Error("O convidado já confirmou sua presença.");
     }
 
-    return await prisma.guest.create({
-      data: { name: data.name, confirmed: true },
-    });
+    return await prisma.guest.create({ data: { name, confirmed: true } });
   }
 
   async read(where: GuestWhereUniqueInput) {

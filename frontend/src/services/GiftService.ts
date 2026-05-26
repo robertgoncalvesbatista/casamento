@@ -13,18 +13,17 @@ export interface Gift {
   updatedAt: Date;
 }
 
+export type GiftInput = Record<string, string | number | boolean | null>;
+
 class GiftService {
-  async index(config?: Axios.AxiosXHRConfigBase<unknown> | undefined) {
+  async index(config?: Axios.AxiosXHRConfigBase<unknown>) {
     const response = await api.get<Response<Gift[]>>("/gift", config);
     return response.data;
   }
 
-  async create(
-    data: Record<string, string | number | boolean | null>,
-    config?: Axios.AxiosXHRConfigBase<unknown> | undefined,
-  ) {
+  async create(data: GiftInput, config?: Axios.AxiosXHRConfigBase<unknown>) {
     const response = await api.post<Response<Gift>>("/gift", data, config);
-    return response;
+    return response.data;
   }
 
   async read(id: string | number) {
@@ -32,11 +31,7 @@ class GiftService {
     return response.data;
   }
 
-  async update(
-    id: string | number,
-    data: Record<string, string | number | boolean | null>,
-    config?: Axios.AxiosXHRConfigBase<unknown> | undefined,
-  ) {
+  async update(id: string | number, data: GiftInput, config?: Axios.AxiosXHRConfigBase<unknown>) {
     const response = await api.put<Response<Gift>>(`/gift/${id}`, data, config);
     return response.data;
   }
@@ -47,9 +42,7 @@ class GiftService {
   }
 
   async delete(id: string | number) {
-    const response = await api.delete<Response<{ message: string }>>(
-      `/gift/${id}`,
-    );
+    const response = await api.delete<Response<{ message: string }>>(`/gift/${id}`);
     return response.data;
   }
 }

@@ -1,27 +1,24 @@
 import api from "../config/api";
 import { Response } from "../types";
 
-interface Guest {
+export interface Guest {
   id: number;
   name: string;
-  email: string;
-  telephone: string;
   confirmed: boolean;
   giftId: number | null;
   createdAt: Date;
   updatedAt: Date;
 }
 
+export type GuestInput = Record<string, string | number | boolean | null>;
+
 class GuestService {
-  async index(config?: Axios.AxiosXHRConfigBase<unknown> | undefined) {
+  async index(config?: Axios.AxiosXHRConfigBase<unknown>) {
     const response = await api.get<Response<Guest[]>>("/guest", config);
     return response.data;
   }
 
-  async create(
-    data: Record<string, string | number | boolean | null>,
-    config?: Axios.AxiosXHRConfigBase<unknown> | undefined,
-  ) {
+  async create(data: GuestInput, config?: Axios.AxiosXHRConfigBase<unknown>) {
     const response = await api.post<Response<Guest>>("/guest", data, config);
     return response.data;
   }
@@ -31,23 +28,13 @@ class GuestService {
     return response.data;
   }
 
-  async update(
-    id: string | number,
-    data: Record<string, string | number | boolean | null>,
-    config?: Axios.AxiosXHRConfigBase<unknown> | undefined,
-  ) {
-    const response = await api.put<Response<Guest>>(
-      `/guest/${id}`,
-      data,
-      config,
-    );
+  async update(id: string | number, data: GuestInput, config?: Axios.AxiosXHRConfigBase<unknown>) {
+    const response = await api.put<Response<Guest>>(`/guest/${id}`, data, config);
     return response.data;
   }
 
   async delete(id: string | number) {
-    const response = await api.delete<Response<{ message: string }>>(
-      `/guest/${id}`,
-    );
+    const response = await api.delete<Response<{ message: string }>>(`/guest/${id}`);
     return response.data;
   }
 }
